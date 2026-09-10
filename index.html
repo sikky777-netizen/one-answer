@@ -1,349 +1,52 @@
-<!doctype html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover" />
-  <meta name="theme-color" content="#101827" />
-  <meta name="description" content="마음속 질문에 랜덤한 한 문장으로 답을 건네는 자기성찰용 PWA" />
-  <link rel="manifest" href="./manifest.webmanifest" />
-  <link rel="icon" href="./icon-192.png" />
-  <title>한 장의 답</title>
-  <style>
-    :root{
-      --bg:#0b1220; --panel:#121c2d; --panel2:#182338; --text:#f6f1e5;
-      --muted:#aeb8c8; --gold:#d8b56a; --gold2:#f1d796; --line:#283650;
-      --danger:#f1a7a7;
-    }
-    *{box-sizing:border-box}
-    html,body{margin:0;min-height:100%;background:
-      radial-gradient(circle at 20% -10%,#1b2a46 0,transparent 42%),
-      linear-gradient(180deg,#0b1220,#09101b 70%);
-      color:var(--text);font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI","Noto Sans KR",sans-serif}
-    body{min-height:100vh}
-    button,input,select{font:inherit}
-    button{cursor:pointer}
-    .app{width:min(760px,100%);margin:0 auto;padding:22px 18px calc(38px + env(safe-area-inset-bottom))}
-    .top{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-bottom:24px}
-    .brand{display:flex;align-items:center;gap:12px}
-    .bookmark{width:44px;height:52px;border:1px solid #c7a257;border-radius:6px 6px 3px 3px;
-      background:linear-gradient(145deg,#22304a,#111b2c);position:relative;box-shadow:0 8px 30px #0006}
-    .bookmark:after{content:"?";position:absolute;inset:0;display:grid;place-items:center;color:var(--gold2);font-size:26px;font-family:Georgia,serif}
-    .brand h1{font:700 24px/1.1 Georgia,"Noto Serif KR",serif;margin:0;letter-spacing:-.5px}
-    .brand small{color:var(--muted);display:block;margin-top:4px}
-    .install{display:none;border:1px solid var(--line);background:#111a2a;color:var(--gold2);padding:9px 12px;border-radius:12px}
-    .hero{text-align:center;padding:20px 2px 14px}
-    .hero .eyebrow{color:var(--gold);font-size:12px;letter-spacing:.18em;text-transform:uppercase}
-    .hero h2{font:700 clamp(28px,8vw,48px)/1.18 Georgia,"Noto Serif KR",serif;margin:12px 0 10px;letter-spacing:-1px}
-    .hero p{color:var(--muted);margin:0 auto;max-width:560px;line-height:1.65}
-    .panel{background:linear-gradient(180deg,#131d2fdd,#0f1828ee);border:1px solid var(--line);
-      border-radius:24px;padding:18px;box-shadow:0 18px 60px #0005;margin-top:18px;backdrop-filter:blur(8px)}
-    label{display:block;color:#d5dbea;font-size:13px;margin-bottom:8px}
-    .question{width:100%;background:#0a1220;border:1px solid #31415f;color:white;border-radius:14px;padding:14px 15px;outline:none}
-    .question:focus{border-color:#ba9856;box-shadow:0 0 0 3px #d8b56a20}
-    .cats{display:flex;gap:8px;overflow:auto;padding:14px 0 3px;scrollbar-width:none}
-    .cats::-webkit-scrollbar{display:none}
-    .chip{border:1px solid #31415f;background:#0d1625;color:#c9d1de;border-radius:999px;padding:9px 13px;white-space:nowrap}
-    .chip.active{background:var(--gold);border-color:var(--gold);color:#111827;font-weight:700}
-    .open-btn{width:100%;margin-top:16px;border:0;border-radius:16px;padding:15px 18px;
-      background:linear-gradient(135deg,#c69d4d,#f0d792);color:#16120a;font-weight:800;box-shadow:0 12px 28px #d8b56a25}
-    .open-btn:active{transform:translateY(1px)}
-    .answer-wrap{display:none;margin-top:18px}
-    .answer-card{position:relative;overflow:hidden;min-height:320px;border-radius:24px;padding:28px 24px;
-      background:
-        radial-gradient(circle at 80% 10%,#d8b56a1b,transparent 30%),
-        linear-gradient(145deg,#1c2941,#101827);
-      border:1px solid #46536d;box-shadow:inset 0 1px #ffffff0b,0 25px 70px #0005}
-    .answer-card:before{content:"";position:absolute;inset:12px;border:1px solid #d8b56a40;border-radius:18px;pointer-events:none}
-    .answer-content{position:relative;z-index:1;min-height:260px;display:flex;flex-direction:column;justify-content:center;align-items:center;text-align:center}
-    .answer-kicker{color:var(--gold);font-size:12px;letter-spacing:.18em;margin-bottom:18px}
-    .q-display{color:#bcc6d6;font-size:14px;max-width:90%;margin-bottom:18px;word-break:keep-all}
-    .answer-text{font:700 clamp(27px,7vw,44px)/1.35 Georgia,"Noto Serif KR",serif;letter-spacing:-1px;word-break:keep-all}
-    .answer-note{margin-top:18px;color:#b3bdcd;font-size:13px;line-height:1.55}
-    .answer-actions{display:grid;grid-template-columns:repeat(2,1fr);gap:9px;margin-top:12px}
-    .answer-actions button{border:1px solid #34435e;background:#111b2d;color:#eef2f7;border-radius:13px;padding:12px}
-    .answer-actions button.primary{color:#17130c;background:#e2c477;border-color:#e2c477;font-weight:700}
-    .history{margin-top:22px}
-    .history h3{font-size:15px;margin:0 0 9px}
-    .history-list{display:grid;gap:8px}
-    .hist{padding:11px 12px;border:1px solid #26354f;border-radius:12px;background:#0d1624}
-    .hist b{display:block;font-size:13px;color:#e9d39e;margin-bottom:4px}
-    .hist span{color:#c4cbd7;font-size:13px}
-    footer{color:#7f8a9b;font-size:11px;line-height:1.6;text-align:center;padding:22px 10px 0}
-    .shake{animation:shake .35s ease}
-    @keyframes shake{0%,100%{transform:translateX(0)}25%{transform:translateX(-7px)}75%{transform:translateX(7px)}}
-    .fadein{animation:fadein .45s ease}
-    @keyframes fadein{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}
-    .toast{position:fixed;left:50%;bottom:calc(20px + env(safe-area-inset-bottom));transform:translateX(-50%);
-      background:#202b3f;color:white;padding:11px 15px;border:1px solid #40506e;border-radius:999px;display:none;z-index:10;box-shadow:0 12px 30px #0007}
-    @media(min-width:620px){.answer-actions{grid-template-columns:repeat(4,1fr)}}
-  </style>
-</head>
-<body>
-<main class="app">
-  <header class="top">
-    <div class="brand">
-      <div class="bookmark" aria-hidden="true"></div>
-      <div><h1>한 장의 답</h1><small>마음속 질문에, 한 문장.</small></div>
-    </div>
-    <button id="installBtn" class="install">앱 설치</button>
-  </header>
-
-  <section class="hero">
-    <div class="eyebrow">Random Answer</div>
-    <h2>답이 필요할 때<br>한 장을 펼쳐보세요.</h2>
-    <p>질문을 떠올리거나 직접 적어보세요. 정답이라기보다, 생각의 방향을 바꾸는 한 문장을 건넵니다.</p>
-  </section>
-
-  <section class="panel">
-    <label for="question">질문 (선택)</label>
-    <input id="question" class="question" maxlength="100" placeholder="예: 지금 이 결정을 해도 될까?" autocomplete="off">
-
-    <div class="cats" id="cats" aria-label="카테고리">
-      <button class="chip active" data-cat="all">전체</button>
-      <button class="chip" data-cat="love">사랑</button>
-      <button class="chip" data-cat="money">돈</button>
-      <button class="chip" data-cat="work">일</button>
-      <button class="chip" data-cat="people">인간관계</button>
-      <button class="chip" data-cat="decision">결정</button>
-      <button class="chip" data-cat="today">오늘</button>
-    </div>
-
-    <button id="openBtn" class="open-btn">답을 펼쳐보기</button>
-
-    <div id="answerWrap" class="answer-wrap">
-      <article id="answerCard" class="answer-card">
-        <div class="answer-content">
-          <div class="answer-kicker">YOUR ANSWER</div>
-          <div id="qDisplay" class="q-display"></div>
-          <div id="answerText" class="answer-text"></div>
-          <div id="answerNote" class="answer-note"></div>
-        </div>
-      </article>
-      <div class="answer-actions">
-        <button id="againBtn">다시 뽑기</button>
-        <button id="copyBtn">문구 복사</button>
-        <button id="saveBtn">이미지 저장</button>
-        <button id="shareBtn" class="primary">공유하기</button>
-      </div>
-    </div>
-  </section>
-
-  <section class="history panel">
-    <h3>최근 답변</h3>
-    <div id="historyList" class="history-list"><div class="hist"><span>아직 펼친 답이 없어요.</span></div></div>
-  </section>
-
-  <footer>
-    이 앱의 문구는 자체 제작된 랜덤 문장입니다. 특정 도서의 본문을 복제하지 않습니다.<br>
-    중요한 법률·의료·투자·안전 판단은 랜덤 답변이 아니라 관련 전문가와 객관적 정보를 기준으로 결정하세요.
-  </footer>
-</main>
-<div id="toast" class="toast"></div>
-
+<!doctype html><html lang="ko"><head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<meta name="theme-color" content="#07111f"><link rel="manifest" href="./manifest.webmanifest">
+<title>한 장의 답</title>
+<style>
+:root{--bg:#07111f;--navy:#12213a;--gold:#d7ad55;--gold2:#f0d58a;--text:#f7f1df;--muted:#a9b4c5;--line:#2b3d59}
+*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -20%,#22385e,transparent 43%),linear-gradient(#0c1829,#06101c 70%);color:var(--text);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans KR",sans-serif}
+button,input{font:inherit}.app{width:min(760px,100%);margin:auto;padding:18px 16px 35px}.top{display:flex;justify-content:space-between;align-items:center}.brand{display:flex;align-items:center;gap:10px}.logo{width:40px;height:46px;border:1px solid var(--gold);border-radius:6px;display:grid;place-items:center;color:var(--gold2);font:700 23px Georgia;background:#14243b}.brand b{font:700 21px Georgia,"Noto Serif KR",serif}.brand small{display:block;color:#91a0b4;font-size:11px}.install{display:none;border:1px solid var(--line);background:#101d30;color:var(--gold2);padding:9px 12px;border-radius:12px}
+.hero{text-align:center;padding:28px 0 8px}.eye{color:var(--gold);font-size:11px;letter-spacing:.22em}.hero h1{font:700 clamp(31px,8vw,53px)/1.18 Georgia,"Noto Serif KR",serif;margin:12px 0 8px;letter-spacing:-1px}.hero p{margin:0;color:var(--muted);font-size:14px}
+.book-zone{height:360px;display:grid;place-items:center;perspective:1400px}.bookwrap{position:relative;width:min(350px,82vw);height:235px;transform-style:preserve-3d;cursor:pointer}.shadow{position:absolute;left:10%;bottom:-25px;width:80%;height:24px;background:#0009;filter:blur(13px);border-radius:50%}.page{position:absolute;inset:7px;background:linear-gradient(90deg,#e2dac5,#fff9ea 45%,#eee5d2);border-radius:9px 20px 20px 9px;color:#172239;display:grid;place-items:center;padding:26px;box-shadow:inset 0 0 25px #a8936a55}.answer{text-align:center;opacity:0;transform:scale(.96);transition:.35s .35s}.bookwrap.open .answer{opacity:1;transform:none}.label{color:#987329;font-size:10px;letter-spacing:.2em;margin-bottom:12px}.q{font-size:12px;color:#737988;margin-bottom:14px;max-height:34px;overflow:hidden}.a{font:700 clamp(23px,6vw,34px)/1.4 Georgia,"Noto Serif KR",serif;word-break:keep-all}.hint{font-size:11px;color:#828895;margin-top:15px;line-height:1.5}
+.cover{position:absolute;inset:0;transform-origin:left center;transition:transform .75s cubic-bezier(.2,.8,.2,1);background:linear-gradient(145deg,#223754,#111f34 70%);border:2px solid #b9934b;border-radius:10px 22px 22px 10px;display:grid;place-items:center;text-align:center;box-shadow:0 28px 70px #0009;z-index:3}.cover:before{content:"";position:absolute;inset:14px;border:1px solid #d8b46155;border-radius:7px 17px 17px 7px}.cover:after{content:"";position:absolute;left:20px;top:10px;bottom:10px;width:2px;background:#d0a95a77}.bookwrap.open .cover{transform:rotateY(-145deg)}.coverin{position:relative;z-index:2}.qm{font:700 72px Georgia;color:var(--gold2)}.ct{font:700 31px Georgia,"Noto Serif KR",serif}.cs{font-size:11px;color:#aab6c7;letter-spacing:.14em;margin-top:8px}.tap{margin-top:18px;color:#d8c58d;font-size:12px;animation:p 1.6s infinite}@keyframes p{50%{opacity:.4}}
+.panel{background:#0e1b2ddd;border:1px solid var(--line);border-radius:20px;padding:15px}.row{display:flex;gap:8px}.question{flex:1;min-width:0;background:#091423;border:1px solid #314765;color:white;border-radius:13px;padding:13px 14px;outline:none}.go{border:0;border-radius:13px;padding:0 17px;background:linear-gradient(135deg,#c89b47,#ead181);font-weight:800;color:#17120a}
+details{margin-top:12px}summary{cursor:pointer;color:#aab5c5;font-size:13px}.cats{display:flex;gap:7px;overflow:auto;padding-top:10px}.chip{border:1px solid #31445f;background:#0b1626;color:#c9d1dc;border-radius:999px;padding:8px 12px;white-space:nowrap}.chip.on{background:var(--gold);color:#17120b;border-color:var(--gold);font-weight:700}
+.actions{display:none;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.actions button{border:1px solid #344966;background:#101e32;color:#eef2f7;border-radius:12px;padding:11px 7px;font-size:13px}.actions .primary{background:#e5c574;color:#17130c;border-color:#e5c574;font-weight:700}
+.histtitle{font-size:12px;color:#8694a8;margin:15px 0 7px}.history{display:flex;gap:8px;overflow:auto}.hist{min-width:205px;background:#0a1525;border:1px solid #263a56;border-radius:12px;padding:10px}.hist b{display:block;color:#dfc67d;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hist span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#b8c2d0;font-size:12px;line-height:1.45;margin-top:4px}
+footer{text-align:center;color:#6d7b8e;font-size:10px;line-height:1.6;padding-top:19px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#203047;border:1px solid #415777;border-radius:999px;padding:10px 14px;display:none;z-index:99}
+@media(max-width:540px){.book-zone{height:330px}.bookwrap{height:215px}.actions{grid-template-columns:repeat(2,1fr)}}
+</style></head><body><main class="app">
+<header class="top"><div class="brand"><div class="logo">?</div><div><b>한 장의 답</b><small>마음속 질문에, 한 문장.</small></div></div><button id="install" class="install">앱 설치</button></header>
+<section class="hero"><div class="eye">RANDOM ANSWER</div><h1>마음속으로 질문을<br>하나 떠올려보세요.</h1><p>책을 누르면 오늘 당신에게 필요한 한 문장이 펼쳐집니다.</p></section>
+<div class="book-zone"><div id="book" class="bookwrap" tabindex="0"><div class="shadow"></div><div class="page"><div class="answer"><div class="label">YOUR ANSWER</div><div id="q" class="q">마음속 질문에</div><div id="a" class="a">책을 펼쳐보세요.</div><div id="hint" class="hint"></div></div></div><div class="cover"><div class="coverin"><div class="qm">?</div><div class="ct">한 장의 답</div><div class="cs">TOUCH TO OPEN</div><div class="tap">책을 눌러 펼치기</div></div></div></div></div>
+<section class="panel"><div class="row"><input id="question" class="question" maxlength="100" placeholder="질문을 직접 적어도 좋아요 (선택)"><button id="go" class="go">펼치기</button></div>
+<details><summary>답의 주제 선택</summary><div class="cats"><button class="chip on" data-c="all">전체</button><button class="chip" data-c="love">사랑</button><button class="chip" data-c="money">돈</button><button class="chip" data-c="work">일</button><button class="chip" data-c="people">인간관계</button><button class="chip" data-c="decision">결정</button><button class="chip" data-c="today">오늘</button></div></details>
+<div id="actions" class="actions"><button id="again">다시 펼치기</button><button id="copy">문구 복사</button><button id="save">이미지 저장</button><button id="share" class="primary">공유하기</button></div>
+<div class="histtitle">최근 펼친 답</div><div id="history" class="history"><div class="hist"><span>아직 펼친 답이 없어요.</span></div></div></section>
+<footer>자체 제작 랜덤 문구를 사용하는 자기성찰용 앱입니다.<br>중요한 법률·의료·투자·안전 판단은 객관적 정보와 전문가 검토를 기준으로 결정하세요.</footer></main><div id="toast" class="toast"></div>
 <script>
-(() => {
-  const $ = s => document.querySelector(s);
-  const $$ = s => [...document.querySelectorAll(s)];
-
-  // 문장 조합 풀: 외부 AI/API 없이 기기 안에서만 랜덤 조합됩니다.
-  // 아래 배열을 늘리면 조합 수가 기하급수적으로 증가합니다.
-  const banks = {
-    all: {
-      lead:["지금은","이번에는","생각보다","의외로","조금 더 보면","마음을 가라앉히면","한 번만 더 확인하면","지금의 흐름이라면","서두르지 않는다면","결국에는"],
-      core:["움직이는 쪽이 낫습니다","기다리는 편이 좋습니다","다른 길이 보일 겁니다","이미 답에 가까이 와 있습니다","작은 선택이 큰 차이를 만듭니다","처음 생각이 맞을 가능성이 큽니다","방향을 살짝 바꿔보세요","한 가지를 내려놓을 필요가 있습니다","예상 밖의 기회가 생길 수 있습니다","확신보다 확인이 먼저입니다","지금의 선택을 단순하게 만들어보세요","다시 시작해도 늦지 않습니다"],
-      tail:["오늘 안에 결론낼 필요는 없습니다.","작은 신호를 놓치지 마세요.","조건 하나만 더 확인해보세요.","당장의 기분과 장기적인 이익을 구분해보세요.","말보다 행동을 기준으로 보세요.","후회가 적은 쪽을 고르세요.","욕심을 하나 덜어내면 답이 선명해집니다.","첫 번째 반응보다 두 번째 생각을 믿어보세요."]
-    },
-    love: {
-      lead:["마음의 문제라면","그 사람보다 먼저","이번 관계에서는","지금의 감정만 보면","조금 거리를 두면","솔직해질 수 있다면","상대의 말보다 행동을 보면","기대를 낮추고 보면","아직 마음이 남아 있다면","새로운 흐름을 원한다면"],
-      core:["확인보다 대화가 필요합니다","조금 더 지켜보는 게 좋습니다","먼저 연락해도 괜찮습니다","이번에는 기다려보세요","경계를 분명히 하는 게 좋습니다","미련과 가능성을 구분해야 합니다","생각보다 단순한 문제일 수 있습니다","상대의 선택을 존중하는 게 답입니다","당신의 마음도 같은 만큼 중요합니다","관계를 밀어붙이지 않는 편이 낫습니다","진심을 한 번은 표현해보세요","새로운 가능성을 닫지 마세요"],
-      tail:["답장은 마음의 크기를 정확히 재는 도구가 아닙니다.","좋아하는 것과 잘 맞는 것은 다를 수 있습니다.","혼자만 애쓰는 관계인지 살펴보세요.","말하지 않으면 상대는 모를 수 있습니다.","관계에도 타이밍이 있습니다.","불안 때문에 결정을 서두르지 마세요.","자존심보다 명확함이 도움이 됩니다.","상대가 아니라 내 기준도 확인해보세요."]
-    },
-    money: {
-      lead:["돈의 문제라면","지금 숫자를 다시 보면","수익보다 먼저","이번 선택에서는","한 번 더 계산하면","현금흐름을 기준으로 보면","기대수익을 낮춰 잡으면","손실 가능성까지 넣어보면","계약 전에","지금은 특히"],
-      core:["보수적으로 가는 편이 낫습니다","조건을 더 확인해야 합니다","지금 바로 결정하지 않는 게 좋습니다","작게 시작하는 게 유리합니다","수익보다 위험 관리가 먼저입니다","숨은 비용을 찾아보세요","현금이 묶이는 기간을 확인하세요","한 번의 큰 승부보다 반복 가능한 구조가 중요합니다","좋아 보이는 숫자보다 실제 입금 시점을 보세요","제3자의 검토가 도움이 됩니다","계약서 한 줄이 결과를 바꿀 수 있습니다","철수 기준부터 정해두세요"],
-      tail:["확정 수익처럼 들리는 말은 한 번 더 의심하세요.","대출 조건과 중도 해지 비용도 숫자에 넣으세요.","최악의 경우에도 버틸 수 있는지 보세요.","상대방의 자금력도 확인 대상입니다.","돈이 들어오는 시점과 나가는 시점을 나눠 적어보세요.","기회비용까지 계산하면 답이 달라질 수 있습니다.","좋은 거래는 서두르게 만들 필요가 없습니다.","모르는 비용은 없는 비용이 아닙니다."]
-    },
-    work: {
-      lead:["일의 문제라면","이번 프로젝트는","지금 업무에서는","성과를 내려면","한 번 방향을 정리하면","사람보다 구조를 보면","우선순위를 다시 잡으면","지금 막힌 이유를 보면","완벽함을 내려놓으면","오늘 한 가지에 집중하면"],
-      core:["먼저 시작하는 게 답입니다","범위를 줄이는 게 좋습니다","역할을 분명히 해야 합니다","한 번 더 협의가 필요합니다","자료를 먼저 정리하세요","결정권자를 확인하세요","작은 결과부터 만드는 게 유리합니다","지금 방식보다 단순한 방법이 있습니다","마감보다 핵심 조건을 먼저 잡으세요","혼자 끌고 가지 않는 게 좋습니다","해야 할 일보다 하지 않을 일을 정하세요","다음 단계 하나만 확정해보세요"],
-      tail:["회의보다 산출물 하나가 더 빠른 답이 될 수 있습니다.","누가 결정하는지 모르면 일이 길어집니다.","좋은 아이디어도 담당자가 없으면 멈춥니다.","완성도 100%보다 진행 가능한 80%가 나을 때가 있습니다.","기한과 책임자를 같이 적어두세요.","막힌 부분은 쪼개면 움직입니다.","자료가 부족하면 가정과 사실을 분리하세요.","오늘 끝낼 수 있는 단위로 줄여보세요."]
-    },
-    people: {
-      lead:["사람 문제라면","지금 관계에서는","상대의 의도를 추측하기보다","감정이 올라왔을 때보다","조금 시간을 두고 보면","이번에는","선을 지킬 수 있다면","대화 전에","오해를 줄이려면","관계를 오래 가져가려면"],
-      core:["직접 확인하는 게 낫습니다","조금 거리를 두는 게 좋습니다","한 번은 솔직하게 말해보세요","반응보다 패턴을 보세요","기대치를 조정할 필요가 있습니다","당신의 기준을 분명히 하세요","상대가 바뀌기를 기다리지 마세요","할 수 있는 만큼만 하세요","굳이 설득하지 않아도 됩니다","말을 줄이고 행동을 보세요","이번에는 양보하지 않는 편이 낫습니다","관계를 끊기보다 경계를 세워보세요"],
-      tail:["한 번의 실수와 반복되는 태도는 다릅니다.","상대의 감정까지 책임질 필요는 없습니다.","애매한 약속은 구체적으로 바꿔보세요.","좋은 관계는 일방적인 인내만으로 유지되지 않습니다.","설명해도 계속 왜곡된다면 거리를 둘 이유가 됩니다.","감정적인 메시지는 조금 늦게 보내도 됩니다.","고마움과 불편함을 동시에 말할 수 있습니다.","확실하지 않은 이야기는 사실처럼 다루지 마세요."]
-    },
-    decision: {
-      lead:["결정을 내려야 한다면","두 선택지 사이에서","지금 기준으로는","불확실성이 크다면","오늘 결정해야 한다면","되돌릴 수 있는 선택이라면","되돌리기 어려운 선택이라면","정보가 부족하다면","마음과 숫자가 다르다면","결정이 무겁게 느껴진다면"],
-      core:["작게 시험해보는 쪽이 좋습니다","결정을 미루고 정보를 더 모으세요","원래의 기준으로 돌아가세요","최악의 경우를 먼저 계산하세요","선택지를 하나 더 만들어보세요","조건부로 진행하는 방법을 찾으세요","하지 않는 선택의 비용도 보세요","되돌릴 수 있는 쪽부터 시도하세요","감정이 가라앉은 뒤 결정하세요","누가 이익을 보는지 확인하세요","지금보다 한 단계 단순화하세요","기준을 세 개만 남겨 비교하세요"],
-      tail:["좋은 결정은 모든 불안을 없애주지는 않습니다.","모든 정보를 얻을 때까지 기다리면 기회를 놓칠 수도 있습니다.","반대로 되돌릴 수 없는 결정은 속도보다 검증이 중요합니다.","한 달 뒤의 내가 납득할 선택인지 생각해보세요.","결정 기준을 글로 적으면 감정과 사실이 분리됩니다.","남의 확신이 내 근거가 되지는 않습니다.","확실하지 않다면 계약보다 옵션이 유리할 수 있습니다.","포기 비용도 선택 비용의 일부입니다."]
-    },
-    today: {
-      lead:["오늘은","지금 이 순간에는","오늘 하루만큼은","생각이 많다면","기분을 바꾸고 싶다면","뭔가 하나 해본다면","오늘의 흐름은","큰일보다 먼저","마음이 답답하다면","오늘 저녁 전까지"],
-      core:["작은 일 하나를 끝내보세요","연락 하나를 먼저 해보세요","미뤄둔 일을 10분만 시작해보세요","잠깐 밖으로 나가보세요","결정을 하나 줄여보세요","해야 할 일을 세 개만 남겨보세요","좋은 소식을 기다리기보다 하나 만들어보세요","정리부터 시작해보세요","휴식 시간을 미리 정해두세요","쓸데없는 알림 하나를 꺼보세요","고마운 사람에게 짧게 표현해보세요","내일 할 일을 오늘 당겨 하지 않아도 됩니다"],
-      tail:["작은 완료감이 생각보다 큰 힘을 줍니다.","오늘의 기분이 인생 전체의 결론은 아닙니다.","20분이면 충분한 일부터 골라보세요.","폰을 잠깐 멀리 두는 것도 괜찮습니다.","한 가지를 끝내면 다음 일이 쉬워집니다.","컨디션이 낮은 날엔 기준을 낮춰도 됩니다.","오늘의 목표는 완벽함보다 회복일 수도 있습니다.","내일을 편하게 만드는 일 하나만 해도 충분합니다."]
-    }
-  };
-
-  const shortAnswers = [
-    "예. 다만 조건을 확인하세요.","아직은 아닙니다.","조금 더 기다려보세요.","이번에는 해보는 쪽입니다.",
-    "서두르지 마세요.","다른 선택지가 있습니다.","처음 생각을 다시 보세요.","작게 시작하세요.",
-    "그만두기엔 이릅니다.","지금은 내려놓는 편이 낫습니다.","한 번 더 확인하세요.","상대의 행동을 보세요.",
-    "숫자를 다시 계산하세요.","오늘은 결정하지 마세요.","당신이 먼저 움직여도 됩니다.","이번에는 선을 지키세요.",
-    "기회는 있지만 조건이 붙습니다.","답은 가까운 곳에 있습니다.","예상과 다른 방향을 보세요.","확신이 생길 때까지 계약하지 마세요.",
-    "한 가지를 포기하면 쉬워집니다.","다시 시작해도 괜찮습니다.","말보다 기록을 남기세요.","지금의 불안이 경고인지 피로인지 구분하세요.",
-    "작은 테스트가 답입니다.","오늘 안에 하나는 끝내세요.","결정권자를 먼저 확인하세요.","돈보다 시간을 계산하세요.",
-    "이번에는 보수적으로 가세요.","좋은 신호가 있습니다. 과신은 금물입니다.","미련보다 기준을 보세요.","한 걸음 물러서면 더 잘 보입니다."
-  ];
-
-  const notes = [
-    "정답을 맞히려 하지 말고, 이 문장을 읽었을 때 드는 첫 반응을 살펴보세요.",
-    "마음이 즉시 반박했다면 그 반박 속에 당신의 진짜 기준이 있을 수 있어요.",
-    "이 문장이 마음에 든 이유와 싫은 이유를 각각 한 줄씩 적어보세요.",
-    "중요한 결정이라면 랜덤 문장은 계기로만 쓰고, 실제 근거를 따로 확인하세요.",
-    "지금 떠오른 사람이나 숫자 하나가 있다면 그 부분을 다시 확인해보세요.",
-    "답보다 질문을 조금 바꾸면 더 선명해질 수도 있습니다."
-  ];
-
-  let category = "all";
-  let lastAnswer = "";
-  let deferredPrompt = null;
-  let current = {question:"",answer:"",note:""};
-
-  function rand(arr){ return arr[Math.floor(Math.random()*arr.length)]; }
-  function generate(cat){
-    // 약 32회 중 1회는 짧은 직답형
-    if(Math.random() < 0.032) return rand(shortAnswers);
-    const b = banks[cat] || banks.all;
-    let text = `${rand(b.lead)} ${rand(b.core)}. ${rand(b.tail)}`;
-    if(text === lastAnswer) return generate(cat);
-    lastAnswer = text;
-    return text;
-  }
-  function toast(msg){
-    const t=$("#toast"); t.textContent=msg; t.style.display="block";
-    clearTimeout(t._timer); t._timer=setTimeout(()=>t.style.display="none",1700);
-  }
-  function showAnswer(){
-    const q=$("#question").value.trim();
-    const ans=generate(category);
-    const note=rand(notes);
-    current={question:q,answer:ans,note};
-    $("#qDisplay").textContent=q ? `“${q}”` : "마음속으로 떠올린 질문에";
-    $("#answerText").textContent=ans;
-    $("#answerNote").textContent=note;
-    $("#answerWrap").style.display="block";
-    $("#answerCard").classList.remove("fadein","shake");
-    void $("#answerCard").offsetWidth;
-    $("#answerCard").classList.add("fadein");
-    saveHistory();
-    $("#answerWrap").scrollIntoView({behavior:"smooth",block:"center"});
-  }
-  function saveHistory(){
-    let h=[];
-    try{h=JSON.parse(localStorage.getItem("oneAnswerHistory")||"[]")}catch{}
-    h.unshift({q:current.question,a:current.answer,t:Date.now()});
-    h=h.slice(0,8);
-    localStorage.setItem("oneAnswerHistory",JSON.stringify(h));
-    renderHistory();
-  }
-  function renderHistory(){
-    let h=[];
-    try{h=JSON.parse(localStorage.getItem("oneAnswerHistory")||"[]")}catch{}
-    const box=$("#historyList");
-    if(!h.length){box.innerHTML='<div class="hist"><span>아직 펼친 답이 없어요.</span></div>';return}
-    box.innerHTML=h.map(x=>`<div class="hist"><b>${escapeHtml(x.q||"마음속 질문")}</b><span>${escapeHtml(x.a)}</span></div>`).join("");
-  }
-  function escapeHtml(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-
-  async function makeImageBlob(){
-    const canvas=document.createElement("canvas");
-    canvas.width=1080; canvas.height=1350;
-    const ctx=canvas.getContext("2d");
-    const grad=ctx.createLinearGradient(0,0,1080,1350);
-    grad.addColorStop(0,"#101a2c"); grad.addColorStop(1,"#080e18");
-    ctx.fillStyle=grad; ctx.fillRect(0,0,1080,1350);
-    ctx.strokeStyle="#c9a65d"; ctx.lineWidth=3; roundRect(ctx,70,70,940,1210,34); ctx.stroke();
-    ctx.fillStyle="#d8b56a"; ctx.font='600 30px system-ui, "Noto Sans KR"'; ctx.textAlign="center";
-    ctx.fillText("한 장의 답",540,145);
-    ctx.fillStyle="#9eabbc"; ctx.font='28px system-ui, "Noto Sans KR"';
-    const q=current.question ? `“${current.question}”` : "마음속으로 떠올린 질문에";
-    drawWrapped(ctx,q,540,280,820,44,2);
-    ctx.fillStyle="#f6f1e5"; ctx.font='700 60px Georgia, "Noto Serif KR", serif';
-    drawWrapped(ctx,current.answer,540,520,810,84,6);
-    ctx.fillStyle="#98a5b7"; ctx.font='25px system-ui, "Noto Sans KR"';
-    drawWrapped(ctx,current.note,540,1040,790,40,3);
-    ctx.fillStyle="#6f7c90"; ctx.font='22px system-ui, "Noto Sans KR"';
-    ctx.fillText("정답이 아니라, 생각을 여는 한 문장.",540,1215);
-    return await new Promise(resolve=>canvas.toBlob(resolve,"image/png",0.95));
-  }
-  function roundRect(ctx,x,y,w,h,r){
-    ctx.beginPath(); ctx.moveTo(x+r,y); ctx.arcTo(x+w,y,x+w,y+h,r); ctx.arcTo(x+w,y+h,x,y+h,r);
-    ctx.arcTo(x,y+h,x,y,r); ctx.arcTo(x,y,x+w,y,r); ctx.closePath();
-  }
-  function drawWrapped(ctx,text,cx,y,maxWidth,lineHeight,maxLines){
-    const words=[...text]; let line="", lines=[];
-    for(const ch of words){
-      const test=line+ch;
-      if(ctx.measureText(test).width>maxWidth && line){lines.push(line);line=ch;if(lines.length===maxLines-1)break}
-      else line=test;
-    }
-    if(line && lines.length<maxLines) lines.push(line);
-    const total=(lines.length-1)*lineHeight;
-    lines.forEach((l,i)=>ctx.fillText(l,cx,y-total/2+i*lineHeight));
-  }
-  async function saveImage(){
-    if(!current.answer){toast("먼저 답을 펼쳐주세요.");return}
-    const blob=await makeImageBlob();
-    const a=document.createElement("a"); a.href=URL.createObjectURL(blob); a.download="한장의답.png"; a.click();
-    setTimeout(()=>URL.revokeObjectURL(a.href),1500);
-  }
-  async function share(){
-    if(!current.answer){toast("먼저 답을 펼쳐주세요.");return}
-    const blob=await makeImageBlob();
-    const file=new File([blob],"한장의답.png",{type:"image/png"});
-    const text=current.question ? `${current.question}\n\n${current.answer}` : current.answer;
-    try{
-      if(navigator.canShare && navigator.canShare({files:[file]})){
-        await navigator.share({title:"한 장의 답",text,files:[file]});
-      }else if(navigator.share){
-        await navigator.share({title:"한 장의 답",text});
-      }else{
-        await navigator.clipboard.writeText(text); toast("공유 문구를 복사했어요.");
-      }
-    }catch(e){ if(e.name!=="AbortError") toast("공유에 실패했어요."); }
-  }
-
-  $$("#cats .chip").forEach(btn=>btn.addEventListener("click",()=>{
-    $$("#cats .chip").forEach(x=>x.classList.remove("active"));
-    btn.classList.add("active"); category=btn.dataset.cat;
-  }));
-  $("#openBtn").addEventListener("click",showAnswer);
-  $("#againBtn").addEventListener("click",()=>{
-    $("#answerCard").classList.remove("shake"); void $("#answerCard").offsetWidth; $("#answerCard").classList.add("shake");
-    setTimeout(showAnswer,230);
-  });
-  $("#copyBtn").addEventListener("click",async()=>{
-    if(!current.answer){toast("먼저 답을 펼쳐주세요.");return}
-    const text=current.question ? `${current.question}\n\n${current.answer}` : current.answer;
-    try{await navigator.clipboard.writeText(text);toast("복사했어요.");}catch{toast("복사하지 못했어요.");}
-  });
-  $("#saveBtn").addEventListener("click",saveImage);
-  $("#shareBtn").addEventListener("click",share);
-  $("#question").addEventListener("keydown",e=>{if(e.key==="Enter")showAnswer()});
-
-  window.addEventListener("beforeinstallprompt",e=>{
-    e.preventDefault(); deferredPrompt=e; $("#installBtn").style.display="block";
-  });
-  $("#installBtn").addEventListener("click",async()=>{
-    if(!deferredPrompt){toast("브라우저 메뉴에서 홈 화면에 추가할 수 있어요.");return}
-    deferredPrompt.prompt(); await deferredPrompt.userChoice; deferredPrompt=null; $("#installBtn").style.display="none";
-  });
-  window.addEventListener("appinstalled",()=>toast("홈 화면에 설치됐어요."));
-
-  if("serviceWorker" in navigator) window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));
-  renderHistory();
-})();
-</script>
-</body>
-</html>
+(()=>{const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)];
+const A={
+all:["지금은 기다릴 때입니다.","이번에는 해보는 쪽입니다.","조금 더 확인한 뒤 움직이세요.","당신이 처음 생각한 쪽을 다시 보세요.","서두르지 않아도 됩니다.","다른 길이 하나 더 있습니다.","작게 시작하면 답이 보입니다.","지금 내려놓는 것도 선택입니다.","한 번 더 물어보세요.","예상보다 가까운 곳에 답이 있습니다.","오늘 안에 결론낼 필요는 없습니다.","이번에는 단순하게 가세요.","기회는 있습니다. 조건을 확인하세요.","한 걸음 물러서면 더 잘 보입니다.","이번에는 당신의 기준을 우선하세요.","다시 시작해도 늦지 않습니다.","확신보다 확인이 먼저입니다.","후회가 적은 쪽을 고르세요."],
+love:["먼저 연락해도 괜찮습니다.","이번에는 조금 기다려보세요.","말보다 행동을 보세요.","좋아하는 것과 잘 맞는 것은 다릅니다.","한 번은 솔직하게 말해보세요.","혼자만 애쓰고 있는지 확인하세요.","자존심보다 명확함이 도움이 됩니다.","관계를 밀어붙이지 마세요.","새로운 가능성을 닫지 마세요.","미련과 가능성을 구분해보세요.","거리를 조금 두면 답이 보입니다.","지금은 확인보다 대화가 필요합니다."],
+money:["이번에는 보수적으로 가세요.","숫자를 다시 계산하세요.","지금 바로 결정하지 않는 게 좋습니다.","작게 시작하세요.","현금흐름부터 확인하세요.","숨은 비용을 찾아보세요.","최악의 경우에도 버틸 수 있는지 보세요.","계약서 한 줄이 결과를 바꿀 수 있습니다.","실제 입금 시점을 보세요.","제3자의 검토를 받아보세요.","철수 기준부터 정해두세요.","수익보다 위험 관리가 먼저입니다."],
+work:["먼저 시작하는 게 답입니다.","범위를 줄이세요.","역할을 분명히 해야 합니다.","한 번 더 협의가 필요합니다.","자료를 먼저 정리하세요.","결정권자를 확인하세요.","작은 결과부터 만드세요.","지금보다 단순한 방법이 있습니다.","혼자 끌고 가지 않는 게 좋습니다.","다음 단계 하나만 확정하세요.","기한과 책임자를 같이 정하세요.","오늘 끝낼 수 있는 단위로 줄이세요."],
+people:["직접 확인하는 게 낫습니다.","조금 거리를 두세요.","한 번은 솔직하게 말해보세요.","반응보다 반복되는 패턴을 보세요.","기대치를 조정할 필요가 있습니다.","당신의 기준을 분명히 하세요.","상대가 바뀌기를 기다리지 마세요.","할 수 있는 만큼만 하세요.","굳이 설득하지 않아도 됩니다.","이번에는 양보하지 않는 편이 낫습니다.","관계를 끊기보다 경계를 세워보세요.","한 번의 실수와 반복되는 태도는 다릅니다."],
+decision:["작게 시험해보는 쪽이 좋습니다.","정보를 더 모으세요.","원래의 기준으로 돌아가세요.","최악의 경우를 먼저 계산하세요.","선택지를 하나 더 만들어보세요.","조건부로 진행할 방법을 찾으세요.","하지 않는 선택의 비용도 보세요.","되돌릴 수 있는 쪽부터 시도하세요.","감정이 가라앉은 뒤 결정하세요.","누가 이익을 보는지 확인하세요.","기준을 세 개만 남겨 비교하세요.","오늘 결정하지 않아도 됩니다."],
+today:["작은 일 하나를 끝내보세요.","연락 하나를 먼저 해보세요.","미뤄둔 일을 10분만 시작해보세요.","잠깐 밖으로 나가보세요.","해야 할 일을 세 개만 남겨보세요.","좋은 소식을 기다리기보다 하나 만들어보세요.","정리부터 시작해보세요.","휴식 시간을 미리 정해두세요.","고마운 사람에게 짧게 표현해보세요.","오늘의 기분이 인생 전체의 결론은 아닙니다.","20분이면 충분한 일부터 골라보세요.","오늘의 목표는 완벽함보다 회복일 수도 있습니다."]};
+const H=["이 문장을 읽었을 때 든 첫 반응을 기억해보세요.","마음이 즉시 반박했다면 그 안에 진짜 기준이 있을 수 있어요.","답보다 질문을 조금 바꾸면 더 선명해질 수도 있습니다.","중요한 결정이라면 이 문장은 계기로만 사용하세요.","지금 떠오른 사람이나 숫자가 있다면 그 부분을 다시 확인해보세요."];
+let cat="all",last="",cur={q:"",a:"",h:""},defer=null;const rand=x=>x[Math.floor(Math.random()*x.length)];
+function toast(m){let t=$("#toast");t.textContent=m;t.style.display="block";clearTimeout(t.x);t.x=setTimeout(()=>t.style.display="none",1600)}
+function pick(){let p=A[cat],a=rand(p);if(a===last&&p.length>1)a=p[(p.indexOf(a)+1)%p.length];last=a;return a}
+function open(){cur={q:$("#question").value.trim(),a:pick(),h:rand(H)};$("#q").textContent=cur.q?`“${cur.q}”`:"마음속으로 떠올린 질문에";$("#a").textContent=cur.a;$("#hint").textContent=cur.h;$("#book").classList.add("open");$("#actions").style.display="grid";savehist()}
+function reopen(){$("#book").classList.remove("open");setTimeout(open,420)}
+function esc(s){return s.replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function savehist(){let h=[];try{h=JSON.parse(localStorage.getItem("answerHist")||"[]")}catch{}h.unshift({q:cur.q,a:cur.a});h=h.slice(0,8);localStorage.setItem("answerHist",JSON.stringify(h));render()}
+function render(){let h=[];try{h=JSON.parse(localStorage.getItem("answerHist")||"[]")}catch{};$("#history").innerHTML=h.length?h.map(x=>`<div class="hist"><b>${esc(x.q||"마음속 질문")}</b><span>${esc(x.a)}</span></div>`).join(""):'<div class="hist"><span>아직 펼친 답이 없어요.</span></div>'}
+function wrap(c,t,x,y,w,lh,max){let l="",ls=[];for(const ch of [...t]){let z=l+ch;if(c.measureText(z).width>w&&l){ls.push(l);l=ch;if(ls.length===max-1)break}else l=z}if(l&&ls.length<max)ls.push(l);let total=(ls.length-1)*lh;ls.forEach((s,i)=>c.fillText(s,x,y-total/2+i*lh))}
+async function blob(){let c=document.createElement("canvas");c.width=1080;c.height=1350;let x=c.getContext("2d"),g=x.createLinearGradient(0,0,1080,1350);g.addColorStop(0,"#13243c");g.addColorStop(1,"#07101d");x.fillStyle=g;x.fillRect(0,0,1080,1350);x.strokeStyle="#d8b05a";x.lineWidth=3;x.strokeRect(70,70,940,1210);x.textAlign="center";x.fillStyle="#e3c675";x.font="600 30px system-ui";x.fillText("한 장의 답",540,150);x.fillStyle="#a7b0be";x.font="28px system-ui";wrap(x,cur.q?`“${cur.q}”`:"마음속으로 떠올린 질문에",540,310,820,42,2);x.fillStyle="#f7f0df";x.font="700 62px Georgia";wrap(x,cur.a,540,650,810,86,5);x.fillStyle="#9da9b8";x.font="25px system-ui";wrap(x,cur.h,540,1080,780,40,3);x.fillStyle="#6e7b8e";x.font="21px system-ui";x.fillText("정답이 아니라, 생각을 여는 한 문장.",540,1215);return await new Promise(r=>c.toBlob(r,"image/png",.95))}
+async function save(){if(!cur.a)return toast("먼저 책을 펼쳐주세요.");let b=await blob(),a=document.createElement("a");a.href=URL.createObjectURL(b);a.download="한장의답.png";a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1200)}
+async function share(){if(!cur.a)return toast("먼저 책을 펼쳐주세요.");let b=await blob(),f=new File([b],"한장의답.png",{type:"image/png"}),text=cur.q?`${cur.q}\n\n${cur.a}`:cur.a;try{if(navigator.canShare&&navigator.canShare({files:[f]}))await navigator.share({title:"한 장의 답",text,files:[f]});else if(navigator.share)await navigator.share({title:"한 장의 답",text});else{await navigator.clipboard.writeText(text);toast("공유 문구를 복사했어요.")}}catch(e){if(e.name!=="AbortError")toast("공유에 실패했어요.")}}
+$("#book").onclick=()=>$("#book").classList.contains("open")?reopen():open();$("#go").onclick=()=>$("#book").classList.contains("open")?reopen():open();$("#again").onclick=reopen;$("#save").onclick=save;$("#share").onclick=share;$("#copy").onclick=async()=>{if(!cur.a)return toast("먼저 책을 펼쳐주세요.");await navigator.clipboard.writeText(cur.q?`${cur.q}\n\n${cur.a}`:cur.a);toast("복사했어요.")};$("#question").onkeydown=e=>{if(e.key==="Enter")$("#go").click()};$$(".chip").forEach(b=>b.onclick=()=>{$$(".chip").forEach(x=>x.classList.remove("on"));b.classList.add("on");cat=b.dataset.c});
+window.addEventListener("beforeinstallprompt",e=>{e.preventDefault();defer=e;$("#install").style.display="block"});$("#install").onclick=async()=>{if(!defer)return toast("브라우저 메뉴에서 홈 화면에 추가할 수 있어요.");defer.prompt();await defer.userChoice;defer=null;$("#install").style.display="none"};if("serviceWorker"in navigator)window.addEventListener("load",()=>navigator.serviceWorker.register("./sw.js"));render()})();
+</script></body></html>
