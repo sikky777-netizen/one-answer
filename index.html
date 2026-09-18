@@ -1,27 +1,914 @@
-<!doctype html><html lang="ko"><head>
-<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"><meta name="theme-color" content="#07111f">
-<meta name="description" content="질문을 떠올리고 책을 펼쳐 한 문장의 답을 만나보세요. 랜덤 답변과 AI 맞춤답변을 제공하는 한 장의 답 앱입니다.">
-<meta property="og:type" content="website"><meta property="og:site_name" content="한 장의 답"><meta property="og:title" content="한 장의 답"><meta property="og:description" content="질문을 떠올리고 책을 펼쳐 한 문장의 답을 만나보세요."><meta property="og:url" content="https://answer.onentop.art/"><meta property="og:image" content="https://answer.onentop.art/og-image.jpg?v=20260917-4"><meta property="og:image:secure_url" content="https://answer.onentop.art/og-image.jpg?v=20260917-4"><meta property="og:image:type" content="image/jpeg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="까미와 두부가 함께하는 한 장의 답">
-<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="한 장의 답"><meta name="twitter:description" content="마음속 질문에, 한 문장."><meta name="twitter:image" content="https://answer.onentop.art/og-image.jpg?v=20260917-4">
-<link rel="manifest" href="./manifest.webmanifest"><link rel="icon" href="./icon-192.png"><title>한 장의 답</title>
-<style>
-:root{--g:#d7ad55;--g2:#f0d58a;--t:#f7f1df;--m:#a9b4c5;--l:#2b3d59}*{box-sizing:border-box}body{margin:0;min-height:100vh;background:radial-gradient(circle at 50% -20%,#22385e,transparent 43%),linear-gradient(#0c1829,#06101c 70%);color:var(--t);font-family:system-ui,-apple-system,"Segoe UI","Noto Sans KR",sans-serif}button,input{font:inherit}.app{width:min(780px,100%);margin:auto;padding:18px 16px 34px}.top{display:flex;justify-content:space-between;align-items:center}.brand{display:flex;gap:10px;align-items:center}.logo{width:40px;height:46px;border:1px solid var(--g);border-radius:7px;display:grid;place-items:center;background:#14243b;color:var(--g2);font:700 23px Georgia}.brand b{font:700 21px Georgia,"Noto Serif KR",serif}.brand small{display:block;color:#91a0b4;font-size:11px}.install{display:none;border:1px solid var(--l);background:#101d30;color:var(--g2);padding:9px 12px;border-radius:12px}.hero{text-align:center;padding:28px 0 4px}.eye{color:var(--g);font-size:11px;letter-spacing:.22em}.hero h1{font:700 clamp(31px,8vw,52px)/1.18 Georgia,"Noto Serif KR",serif;margin:12px 0 8px}.hero p{margin:0;color:var(--m);font-size:14px}.book-zone{height:345px;display:grid;place-items:center;perspective:1400px}.book{position:relative;width:min(350px,82vw);height:225px;transform-style:preserve-3d;cursor:pointer}.shadow{position:absolute;left:10%;bottom:-25px;width:80%;height:24px;background:#0009;filter:blur(13px);border-radius:50%}.page{position:absolute;inset:7px;background:linear-gradient(90deg,#e2dac5,#fff9ea 45%,#eee5d2);border-radius:9px 20px 20px 9px;color:#172239;display:grid;place-items:center;padding:25px;box-shadow:inset 0 0 25px #a8936a55}.ans{text-align:center;opacity:0;transform:scale(.96);transition:.35s .35s}.book.open .ans{opacity:1;transform:none}.lab{color:#987329;font-size:10px;letter-spacing:.18em;margin-bottom:10px}.q{font-size:12px;color:#737988;margin-bottom:12px;max-height:34px;overflow:hidden}.a{font:700 clamp(22px,6vw,33px)/1.4 Georgia,"Noto Serif KR",serif;word-break:keep-all}.hint{font-size:11px;color:#828895;margin-top:13px;line-height:1.5}.badge{display:inline-block;margin-top:12px;font-size:10px;color:#987329;border:1px solid #d2c0a0;border-radius:999px;padding:4px 9px}.cover{position:absolute;inset:0;transform-origin:left center;transition:transform .75s cubic-bezier(.2,.8,.2,1);background:linear-gradient(145deg,#223754,#111f34 70%);border:2px solid #b9934b;border-radius:10px 22px 22px 10px;display:grid;place-items:center;text-align:center;box-shadow:0 28px 70px #0009;z-index:3}.cover:before{content:"";position:absolute;inset:14px;border:1px solid #d8b46155;border-radius:7px 17px 17px 7px}.book.open .cover{transform:rotateY(-145deg)}.coverin{z-index:2}.qm{font:700 72px Georgia;color:var(--g2)}.ct{font:700 31px Georgia,"Noto Serif KR",serif}.cs{font-size:11px;color:#aab6c7;letter-spacing:.14em;margin-top:8px}.tap{margin-top:18px;color:#d8c58d;font-size:12px}.mascot{position:absolute;width:78px;height:78px;border-radius:50%;border:2px solid var(--g);opacity:0;transform:scale(.72);transition:.35s .4s;z-index:6;box-shadow:0 8px 20px #0008;background-image:url('./og-image.jpg?v=20260917-4');background-repeat:no-repeat;background-color:#0b1626}.book.open .mascot{opacity:1;transform:scale(1)}.kami{right:-48px;top:12px;background-size:520px 273px;background-position:-402px -26px}.dubu{left:-48px;bottom:-12px;background-size:430px 226px;background-position:-25px -142px}.panel{background:#0e1b2ddd;border:1px solid var(--l);border-radius:20px;padding:15px}.row{display:flex;gap:8px}.question{flex:1;min-width:0;background:#091423;border:1px solid #314765;color:#fff;border-radius:13px;padding:13px 14px;outline:none}.go{border:0;border-radius:13px;padding:0 17px;background:linear-gradient(135deg,#c89b47,#ead181);font-weight:800;color:#17120a}.modes{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:12px}.mode{border:1px solid #31445f;background:#0b1626;color:#d0d8e4;border-radius:14px;padding:11px}.mode.on{background:linear-gradient(135deg,#c89b47,#ead181);color:#17120a;border-color:#e8cd7a;font-weight:700}.status{margin-top:10px;padding:10px 12px;border:1px solid #263a56;border-radius:12px;background:#0a1525;color:#aeb9c9;font-size:12px;display:flex;justify-content:space-between;gap:8px}.status b{color:#f0d58a}.appshare{width:100%;margin-top:10px;border:1px solid var(--g);background:#14243b;color:var(--g2);border-radius:13px;padding:12px 14px;font-weight:800}details{margin-top:12px}summary{cursor:pointer;color:#aab5c5;font-size:13px}.cats{display:flex;gap:7px;overflow:auto;padding-top:9px}.chip{border:1px solid #31445f;background:#0b1626;color:#c9d1dc;border-radius:999px;padding:8px 12px;white-space:nowrap}.chip.on{background:var(--g);color:#17120b;border-color:var(--g);font-weight:700}.actions{display:none;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:12px}.actions button{border:1px solid #344966;background:#101e32;color:#eef2f7;border-radius:12px;padding:11px 7px;font-size:13px}.actions .primary{background:#e5c574;color:#17130c;border-color:#e5c574;font-weight:700}.histtitle{font-size:12px;color:#8694a8;margin:15px 0 7px}.history{display:flex;gap:8px;overflow:auto}.hist{min-width:205px;background:#0a1525;border:1px solid #263a56;border-radius:12px;padding:10px}.hist b{display:block;color:#dfc67d;font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}.hist span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;color:#b8c2d0;font-size:12px;line-height:1.45;margin-top:4px}footer{text-align:center;color:#6d7b8e;font-size:10px;line-height:1.6;padding-top:18px}.toast{position:fixed;left:50%;bottom:20px;transform:translateX(-50%);background:#203047;border:1px solid #415777;border-radius:999px;padding:10px 14px;display:none;z-index:99;max-width:calc(100vw - 30px)}.loading{opacity:.6;pointer-events:none}@media(max-width:540px){.book-zone{height:320px}.book{height:208px}.actions{grid-template-columns:repeat(2,1fr)}.mascot{width:64px;height:64px}.kami{right:-30px}.dubu{left:-30px}}
-</style></head><body><main class="app">
-<header class="top"><div class="brand"><div class="logo">?</div><div><b>한 장의 답</b><small>마음속 질문에, 한 문장.</small></div></div><button id="install" class="install">앱 설치</button></header>
-<section class="hero"><div class="eye">RANDOM & AI ANSWER</div><h1>마음속으로 질문을<br>하나 떠올려보세요.</h1><p>책을 누르면 오늘 당신에게 필요한 한 문장이 펼쳐집니다.</p></section>
-<div class="book-zone"><div id="book" class="book"><div class="shadow"></div><div class="page"><div class="ans"><div id="label" class="lab">YOUR ANSWER</div><div id="q" class="q">마음속 질문에</div><div id="a" class="a">책을 펼쳐보세요.</div><div id="hint" class="hint"></div><div id="badge" class="badge">랜덤 답변</div></div></div><div class="cover"><div class="coverin"><div class="qm">?</div><div class="ct">한 장의 답</div><div class="cs">TOUCH TO OPEN</div><div class="tap">책을 눌러 펼치기</div></div></div><div class="mascot kami" aria-label="까미"></div><div class="mascot dubu" aria-label="두부"></div></div></div>
-<section class="panel"><div class="row"><input id="question" class="question" maxlength="200" placeholder="질문을 적어보세요 (선택)"><button id="go" class="go">답 보기</button></div><div class="modes"><button id="randomMode" class="mode on">랜덤 답변 · 무제한</button><button id="aiMode" class="mode">AI 맞춤답변</button></div><div class="status"><span>AI 맞춤답변 테스트</span><b id="remaining">오늘 5회 남음</b></div><button id="appShare" class="appshare">↗ 한 장의 답 공유하기</button>
-<details><summary>답의 주제 선택</summary><div class="cats"><button class="chip on" data-c="all">전체</button><button class="chip" data-c="love">사랑</button><button class="chip" data-c="money">돈</button><button class="chip" data-c="work">일</button><button class="chip" data-c="people">인간관계</button><button class="chip" data-c="decision">결정</button><button class="chip" data-c="today">오늘</button></div></details>
-<div id="actions" class="actions"><button id="again">다시 펼치기</button><button id="copy">문구 복사</button><button id="save">이미지 저장</button><button id="share" class="primary">답 공유하기</button></div><div class="histtitle">최근 펼친 답</div><div id="history" class="history"><div class="hist"><span>아직 펼친 답이 없어요.</span></div></div></section>
-<footer>자기성찰용 앱입니다. 중요한 법률·의료·투자·안전 판단은 객관적 정보와 전문가 검토를 기준으로 결정하세요.</footer></main><div id="toast" class="toast"></div>
-<script>
-(()=>{const $=s=>document.querySelector(s),$$=s=>[...document.querySelectorAll(s)],APP='https://answer.onentop.art/',SHARE='https://answer.onentop.art/share.html?v=20260917-4';
-const A={all:['지금은 기다릴 때입니다.','이번에는 해보는 쪽입니다.','조금 더 확인한 뒤 움직이세요.','서두르지 않아도 됩니다.','작게 시작하면 답이 보입니다.','확신보다 확인이 먼저입니다.','후회가 적은 쪽을 고르세요.'],love:['먼저 연락해도 괜찮습니다.','이번에는 조금 기다려보세요.','말보다 행동을 보세요.','한 번은 솔직하게 말해보세요.','거리를 조금 두면 답이 보입니다.'],money:['이번에는 보수적으로 가세요.','숫자를 다시 계산하세요.','현금흐름부터 확인하세요.','숨은 비용을 찾아보세요.','수익보다 위험 관리가 먼저입니다.'],work:['먼저 시작하는 게 답입니다.','범위를 줄이세요.','역할을 분명히 해야 합니다.','자료를 먼저 정리하세요.','다음 단계 하나만 확정하세요.'],people:['직접 확인하는 게 낫습니다.','조금 거리를 두세요.','반응보다 반복되는 패턴을 보세요.','당신의 기준을 분명히 하세요.','관계를 끊기보다 경계를 세워보세요.'],decision:['작게 시험해보는 쪽이 좋습니다.','정보를 더 모으세요.','최악의 경우를 먼저 계산하세요.','되돌릴 수 있는 쪽부터 시도하세요.','오늘 결정하지 않아도 됩니다.'],today:['작은 일 하나를 끝내보세요.','연락 하나를 먼저 해보세요.','미뤄둔 일을 10분만 시작해보세요.','정리부터 시작해보세요.','오늘의 목표는 완벽함보다 회복일 수도 있습니다.']};
-const H=['이 문장을 읽었을 때 든 첫 반응을 기억해보세요.','마음이 즉시 반박했다면 그 안에 진짜 기준이 있을 수 있어요.','중요한 결정이라면 이 문장은 계기로만 사용하세요.'];let cat='all',mode='random',last='',cur={q:'',a:'',h:'',mode:'random'},defer=null;
-const rand=x=>x[Math.floor(Math.random()*x.length)],day=()=>{let d=new Date();return `${d.getFullYear()}-${d.getMonth()+1}-${d.getDate()}`};function toast(m){let t=$('#toast');t.textContent=m;t.style.display='block';clearTimeout(t.x);t.x=setTimeout(()=>t.style.display='none',1700)}function usage(){let u={date:day(),used:0};try{u=JSON.parse(localStorage.getItem('aiUsage')||JSON.stringify(u))}catch{}if(u.date!==day())u={date:day(),used:0};return u}function remain(){return Math.max(0,5-usage().used)}function upd(){ $('#remaining').textContent=`오늘 ${remain()}회 남음`}function use(){let u=usage();u.used++;localStorage.setItem('aiUsage',JSON.stringify(u));upd()}function pick(){let p=A[cat],a=rand(p);if(a===last&&p.length>1)a=p[(p.indexOf(a)+1)%p.length];last=a;return a}function show(a,isAI=false){cur={q:$('#question').value.trim(),a,h:isAI?'질문에 맞춘 AI 한 문장입니다.':rand(H),mode:isAI?'ai':'random'};$('#label').textContent=isAI?'AI ANSWER':'YOUR ANSWER';$('#q').textContent=cur.q?`“${cur.q}”`:'마음속으로 떠올린 질문에';$('#a').textContent=a;$('#hint').textContent=cur.h;$('#badge').textContent=isAI?'AI 맞춤답변':'랜덤 답변';$('#book').classList.add('open');$('#actions').style.display='grid';saveHist()}
-async function run(){if(mode==='random')return show(pick());let q=$('#question').value.trim();if(!q)return toast('AI 맞춤답변은 질문을 먼저 적어주세요.');if(remain()<=0)return toast('오늘 AI 무료 답변 5회를 모두 사용했어요.');let b=$('#go');b.classList.add('loading');b.textContent='생각 중…';try{let r=await fetch('/api/answer',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({question:q,category:cat})}),d=await r.json();if(!r.ok)throw Error(d.error||'AI 연결에 실패했습니다.');use();show(d.answer,true)}catch(e){toast(e.message)}finally{b.classList.remove('loading');b.textContent='답 보기'}}function closeBook(){$('#book').classList.remove('open')}function openCurrent(){if(cur.a)$('#book').classList.add('open');else run()}function newAnswer(){closeBook();setTimeout(run,420)}function setMode(m){mode=m;$('#randomMode').classList.toggle('on',m==='random');$('#aiMode').classList.toggle('on',m==='ai')}
-function esc(s){return s.replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#039;'}[m]))}function saveHist(){let h=[];try{h=JSON.parse(localStorage.getItem('answerHist')||'[]')}catch{}h.unshift({q:cur.q,a:cur.a});h=h.slice(0,8);localStorage.setItem('answerHist',JSON.stringify(h));render()}function render(){let h=[];try{h=JSON.parse(localStorage.getItem('answerHist')||'[]')}catch{};$('#history').innerHTML=h.length?h.map(x=>`<div class="hist"><b>${esc(x.q||'마음속 질문')}</b><span>${esc(x.a)}</span></div>`).join(''):'<div class="hist"><span>아직 펼친 답이 없어요.</span></div>'}
-async function appShare(){try{if(navigator.share)await navigator.share({title:'한 장의 답',text:'마음속 질문에, 한 문장.',url:SHARE});else{await navigator.clipboard.writeText(SHARE);toast('앱 주소를 복사했어요.')}}catch(e){if(e.name!=='AbortError')toast('공유에 실패했어요.')}}async function answerShare(){if(!cur.a)return toast('먼저 답을 펼쳐주세요.');let text=cur.q?`${cur.q}\n\n${cur.a}`:cur.a;try{if(navigator.share)await navigator.share({title:'한 장의 답',text,url:SHARE});else{await navigator.clipboard.writeText(`${text}\n${SHARE}`);toast('답과 주소를 복사했어요.')}}catch(e){if(e.name!=='AbortError')toast('공유에 실패했어요.')}}
-async function saveImage(){if(!cur.a)return toast('먼저 답을 펼쳐주세요.');let c=document.createElement('canvas');c.width=1080;c.height=1080;let x=c.getContext('2d');x.fillStyle='#07111f';x.fillRect(0,0,1080,1080);x.strokeStyle='#d7ad55';x.lineWidth=3;x.strokeRect(65,65,950,950);x.textAlign='center';x.fillStyle='#e3c675';x.font='600 34px system-ui';x.fillText('한 장의 답',540,155);x.fillStyle='#f7f0df';x.font='700 58px system-ui';let lines=(cur.a.match(/.{1,15}/g)||[cur.a]).slice(0,5);lines.forEach((s,i)=>x.fillText(s,540,470+i*76));let blob=await new Promise(r=>c.toBlob(r,'image/png'));let a=document.createElement('a');a.href=URL.createObjectURL(blob);a.download='한장의답.png';a.click();setTimeout(()=>URL.revokeObjectURL(a.href),1000)}
-$('#book').onclick=()=>$('#book').classList.contains('open')?closeBook():openCurrent();$('#go').onclick=run;$('#again').onclick=newAnswer;$('#appShare').onclick=appShare;$('#share').onclick=answerShare;$('#save').onclick=saveImage;$('#copy').onclick=async()=>{if(!cur.a)return toast('먼저 답을 펼쳐주세요.');await navigator.clipboard.writeText(cur.q?`${cur.q}\n\n${cur.a}`:cur.a);toast('복사했어요.')};$('#randomMode').onclick=()=>setMode('random');$('#aiMode').onclick=()=>setMode('ai');$('#question').onkeydown=e=>{if(e.key==='Enter')$('#go').click()};$$('.chip').forEach(b=>b.onclick=()=>{$$('.chip').forEach(x=>x.classList.remove('on'));b.classList.add('on');cat=b.dataset.c});window.addEventListener('beforeinstallprompt',e=>{e.preventDefault();defer=e;$('#install').style.display='block'});$('#install').onclick=async()=>{if(!defer)return toast('브라우저 메뉴에서 홈 화면에 추가할 수 있어요.');defer.prompt();await defer.userChoice;defer=null;$('#install').style.display='none'};if('serviceWorker'in navigator)window.addEventListener('load',()=>navigator.serviceWorker.register('./sw.js'));upd();render()})();
-</script></body></html>
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="utf-8" />
+    <meta
+      name="viewport"
+      content="width=device-width,initial-scale=1,viewport-fit=cover"
+    />
+    <meta name="theme-color" content="#07111f" />
+    <meta
+      name="description"
+      content="질문을 떠올리고 책을 펼쳐 한 문장의 답을 만나보세요. 랜덤 답변과 AI 맞춤답변을 제공하는 한 장의 답 앱입니다."
+    />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="한 장의 답" />
+    <meta property="og:title" content="한 장의 답" />
+    <meta
+      property="og:description"
+      content="질문을 떠올리고 책을 펼쳐 한 문장의 답을 만나보세요."
+    />
+    <meta property="og:url" content="https://answer.onentop.art/" />
+    <meta
+      property="og:image"
+      content="https://answer.onentop.art/og-image.jpg?v=20260917-5"
+    />
+    <meta
+      property="og:image:secure_url"
+      content="https://answer.onentop.art/og-image.jpg?v=20260917-5"
+    />
+    <meta property="og:image:type" content="image/jpeg" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="두부와 함께하는 한 장의 답" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="한 장의 답" />
+    <meta name="twitter:description" content="마음속 질문에, 한 문장." />
+    <meta
+      name="twitter:image"
+      content="https://answer.onentop.art/og-image.jpg?v=20260917-5"
+    />
+    <link rel="manifest" href="./manifest.webmanifest" />
+    <link rel="icon" href="./icon-192.png" />
+    <title>한 장의 답</title>
+    <style>
+      :root {
+        --g: #d7ad55;
+        --g2: #f0d58a;
+        --t: #f7f1df;
+        --m: #a9b4c5;
+        --l: #2b3d59;
+      }
+      * {
+        box-sizing: border-box;
+      }
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background:
+          radial-gradient(circle at 50% -20%, #22385e, transparent 43%),
+          linear-gradient(#0c1829, #06101c 70%);
+        color: var(--t);
+        font-family:
+          system-ui,
+          -apple-system,
+          "Segoe UI",
+          "Noto Sans KR",
+          sans-serif;
+      }
+      button,
+      input {
+        font: inherit;
+      }
+      .app {
+        width: min(780px, 100%);
+        margin: auto;
+        padding: 18px 16px 34px;
+      }
+      .top {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .brand {
+        display: flex;
+        gap: 10px;
+        align-items: center;
+      }
+      .brand > div:last-child {
+        display: flex;
+        min-width: 0;
+        flex-direction: column;
+        gap: 3px;
+      }
+      .logo {
+        width: 40px;
+        height: 46px;
+        border: 1px solid var(--g);
+        border-radius: 7px;
+        display: grid;
+        place-items: center;
+        background: #14243b;
+        color: var(--g2);
+        font: 700 23px Georgia;
+        flex: 0 0 auto;
+      }
+      .brand b {
+        display: block;
+        font:
+          700 21px Georgia,
+          "Noto Serif KR",
+          serif;
+        line-height: 1.15;
+        white-space: nowrap;
+      }
+      .brand small {
+        display: block;
+        color: #91a0b4;
+        font-size: 11px;
+        line-height: 1.35;
+        white-space: nowrap;
+      }
+      .install {
+        display: none;
+        border: 1px solid var(--l);
+        background: #101d30;
+        color: var(--g2);
+        padding: 9px 12px;
+        border-radius: 12px;
+      }
+      .hero {
+        text-align: center;
+        padding: 28px 0 4px;
+      }
+      .eye {
+        color: var(--g);
+        font-size: 11px;
+        letter-spacing: 0.22em;
+      }
+      .hero h1 {
+        font:
+          700 clamp(31px, 8vw, 52px) / 1.18 Georgia,
+          "Noto Serif KR",
+          serif;
+        margin: 12px 0 8px;
+      }
+      .hero p {
+        margin: 0;
+        color: var(--m);
+        font-size: 14px;
+      }
+      .book-zone {
+        height: 345px;
+        display: grid;
+        place-items: center;
+        perspective: 1400px;
+      }
+      .book {
+        position: relative;
+        width: min(350px, 82vw);
+        height: 225px;
+        transform-style: preserve-3d;
+        cursor: pointer;
+      }
+      .shadow {
+        position: absolute;
+        left: 10%;
+        bottom: -25px;
+        width: 80%;
+        height: 24px;
+        background: #0009;
+        filter: blur(13px);
+        border-radius: 50%;
+      }
+      .page {
+        position: absolute;
+        inset: 7px;
+        background: linear-gradient(90deg, #e2dac5, #fff9ea 45%, #eee5d2);
+        border-radius: 9px 20px 20px 9px;
+        color: #172239;
+        display: grid;
+        place-items: center;
+        padding: 25px;
+        box-shadow: inset 0 0 25px #a8936a55;
+      }
+      .ans {
+        text-align: center;
+        opacity: 0;
+        transform: scale(0.96);
+        transition: 0.35s 0.35s;
+      }
+      .book.open .ans {
+        opacity: 1;
+        transform: none;
+      }
+      .lab {
+        color: #987329;
+        font-size: 10px;
+        letter-spacing: 0.18em;
+        margin-bottom: 10px;
+      }
+      .q {
+        font-size: 12px;
+        color: #737988;
+        margin-bottom: 12px;
+        max-height: 34px;
+        overflow: hidden;
+      }
+      .a {
+        font:
+          700 clamp(22px, 6vw, 33px) / 1.4 Georgia,
+          "Noto Serif KR",
+          serif;
+        word-break: keep-all;
+      }
+      .hint {
+        font-size: 11px;
+        color: #828895;
+        margin-top: 13px;
+        line-height: 1.5;
+      }
+      .badge {
+        display: inline-block;
+        margin-top: 12px;
+        font-size: 10px;
+        color: #987329;
+        border: 1px solid #d2c0a0;
+        border-radius: 999px;
+        padding: 4px 9px;
+      }
+      .cover {
+        position: absolute;
+        inset: 0;
+        transform-origin: left center;
+        transition: transform 0.75s cubic-bezier(0.2, 0.8, 0.2, 1);
+        background: linear-gradient(145deg, #223754, #111f34 70%);
+        border: 2px solid #b9934b;
+        border-radius: 10px 22px 22px 10px;
+        display: grid;
+        place-items: center;
+        text-align: center;
+        box-shadow: 0 28px 70px #0009;
+        z-index: 3;
+      }
+      .cover:before {
+        content: "";
+        position: absolute;
+        inset: 14px;
+        border: 1px solid #d8b46155;
+        border-radius: 7px 17px 17px 7px;
+      }
+      .book.open .cover {
+        transform: rotateY(-145deg);
+      }
+      .coverin {
+        z-index: 2;
+      }
+      .qm {
+        font: 700 72px Georgia;
+        color: var(--g2);
+      }
+      .ct {
+        font:
+          700 31px Georgia,
+          "Noto Serif KR",
+          serif;
+      }
+      .cs {
+        font-size: 11px;
+        color: #aab6c7;
+        letter-spacing: 0.14em;
+        margin-top: 8px;
+      }
+      .tap {
+        margin-top: 18px;
+        color: #d8c58d;
+        font-size: 12px;
+      }
+      .mascot {
+        position: absolute;
+        width: 78px;
+        height: 78px;
+        border-radius: 50%;
+        border: 2px solid var(--g);
+        opacity: 0;
+        transform: scale(0.72);
+        transition: 0.35s 0.4s;
+        z-index: 6;
+        box-shadow: 0 8px 20px #0008;
+        background-image: url("./og-image.jpg?v=20260917-5");
+        background-repeat: no-repeat;
+        background-color: #0b1626;
+      }
+      .book.open .mascot {
+        opacity: 1;
+        transform: scale(1);
+      }
+      .dubu {
+        right: -38px;
+        bottom: -18px;
+        background-size: 430px 226px;
+        background-position: -25px -142px;
+      }
+      .panel {
+        background: #0e1b2ddd;
+        border: 1px solid var(--l);
+        border-radius: 20px;
+        padding: 15px;
+      }
+      .row {
+        display: flex;
+        gap: 8px;
+      }
+      .question {
+        flex: 1;
+        min-width: 0;
+        background: #091423;
+        border: 1px solid #314765;
+        color: #fff;
+        border-radius: 13px;
+        padding: 13px 14px;
+        outline: none;
+      }
+      .go {
+        border: 0;
+        border-radius: 13px;
+        padding: 0 17px;
+        background: linear-gradient(135deg, #c89b47, #ead181);
+        font-weight: 800;
+        color: #17120a;
+      }
+      .modes {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .mode {
+        border: 1px solid #31445f;
+        background: #0b1626;
+        color: #d0d8e4;
+        border-radius: 14px;
+        padding: 11px;
+      }
+      .mode.on {
+        background: linear-gradient(135deg, #c89b47, #ead181);
+        color: #17120a;
+        border-color: #e8cd7a;
+        font-weight: 700;
+      }
+      .status {
+        margin-top: 10px;
+        padding: 10px 12px;
+        border: 1px solid #263a56;
+        border-radius: 12px;
+        background: #0a1525;
+        color: #aeb9c9;
+        font-size: 12px;
+        display: flex;
+        justify-content: space-between;
+        gap: 8px;
+      }
+      .status b {
+        color: #f0d58a;
+      }
+      .appshare {
+        width: 100%;
+        margin-top: 10px;
+        border: 1px solid var(--g);
+        background: #14243b;
+        color: var(--g2);
+        border-radius: 13px;
+        padding: 12px 14px;
+        font-weight: 800;
+      }
+      details {
+        margin-top: 12px;
+      }
+      summary {
+        cursor: pointer;
+        color: #aab5c5;
+        font-size: 13px;
+      }
+      .cats {
+        display: flex;
+        gap: 7px;
+        overflow: auto;
+        padding-top: 9px;
+      }
+      .chip {
+        border: 1px solid #31445f;
+        background: #0b1626;
+        color: #c9d1dc;
+        border-radius: 999px;
+        padding: 8px 12px;
+        white-space: nowrap;
+      }
+      .chip.on {
+        background: var(--g);
+        color: #17120b;
+        border-color: var(--g);
+        font-weight: 700;
+      }
+      .actions {
+        display: none;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+        margin-top: 12px;
+      }
+      .actions button {
+        border: 1px solid #344966;
+        background: #101e32;
+        color: #eef2f7;
+        border-radius: 12px;
+        padding: 11px 7px;
+        font-size: 13px;
+      }
+      .actions .primary {
+        background: #e5c574;
+        color: #17130c;
+        border-color: #e5c574;
+        font-weight: 700;
+      }
+      .histtitle {
+        font-size: 12px;
+        color: #8694a8;
+        margin: 15px 0 7px;
+      }
+      .history {
+        display: flex;
+        gap: 8px;
+        overflow: auto;
+      }
+      .hist {
+        min-width: 205px;
+        background: #0a1525;
+        border: 1px solid #263a56;
+        border-radius: 12px;
+        padding: 10px;
+      }
+      .hist b {
+        display: block;
+        color: #dfc67d;
+        font-size: 11px;
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+      .hist span {
+        display: -webkit-box;
+        -webkit-line-clamp: 2;
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        color: #b8c2d0;
+        font-size: 12px;
+        line-height: 1.45;
+        margin-top: 4px;
+      }
+      footer {
+        text-align: center;
+        color: #6d7b8e;
+        font-size: 10px;
+        line-height: 1.6;
+        padding-top: 18px;
+      }
+      .toast {
+        position: fixed;
+        left: 50%;
+        bottom: 20px;
+        transform: translateX(-50%);
+        background: #203047;
+        border: 1px solid #415777;
+        border-radius: 999px;
+        padding: 10px 14px;
+        display: none;
+        z-index: 99;
+        max-width: calc(100vw - 30px);
+      }
+      .loading {
+        opacity: 0.6;
+        pointer-events: none;
+      }
+      @media (max-width: 540px) {
+        .app {
+          padding-inline: 14px;
+        }
+        .brand {
+          gap: 8px;
+        }
+        .logo {
+          width: 36px;
+          height: 42px;
+        }
+        .brand b {
+          font-size: 19px;
+        }
+        .brand small {
+          font-size: 10px;
+        }
+        .book-zone {
+          height: 320px;
+        }
+        .book {
+          height: 208px;
+        }
+        .actions {
+          grid-template-columns: repeat(2, 1fr);
+        }
+        .mascot {
+          width: 64px;
+          height: 64px;
+        }
+        .dubu {
+          right: -20px;
+          bottom: -16px;
+        }
+      }
+    </style>
+  </head>
+  <body>
+    <main class="app">
+      <header class="top">
+        <div class="brand">
+          <div class="logo">?</div>
+          <div><b>한 장의 답</b><small>마음속 질문에, 한 문장.</small></div>
+        </div>
+        <button id="install" class="install">앱 설치</button>
+      </header>
+      <section class="hero">
+        <div class="eye">RANDOM & AI ANSWER</div>
+        <h1>마음속으로 질문을<br />하나 떠올려보세요.</h1>
+        <p>책을 누르면 오늘 당신에게 필요한 한 문장이 펼쳐집니다.</p>
+      </section>
+      <div class="book-zone">
+        <div id="book" class="book">
+          <div class="shadow"></div>
+          <div class="page">
+            <div class="ans">
+              <div id="label" class="lab">YOUR ANSWER</div>
+              <div id="q" class="q">마음속 질문에</div>
+              <div id="a" class="a">책을 펼쳐보세요.</div>
+              <div id="hint" class="hint"></div>
+              <div id="badge" class="badge">랜덤 답변</div>
+            </div>
+          </div>
+          <div class="cover">
+            <div class="coverin">
+              <div class="qm">?</div>
+              <div class="ct">한 장의 답</div>
+              <div class="cs">TOUCH TO OPEN</div>
+              <div class="tap">책을 눌러 펼치기</div>
+            </div>
+          </div>
+          <div class="mascot dubu" aria-label="두부"></div>
+        </div>
+      </div>
+      <section class="panel">
+        <div class="row">
+          <input
+            id="question"
+            class="question"
+            maxlength="200"
+            placeholder="질문을 적어보세요 (선택)"
+          /><button id="go" class="go">답 보기</button>
+        </div>
+        <div class="modes">
+          <button id="randomMode" class="mode on">랜덤 답변 · 무제한</button
+          ><button id="aiMode" class="mode">AI 맞춤답변</button>
+        </div>
+        <div class="status">
+          <span>AI 맞춤답변 테스트</span><b id="remaining">오늘 5회 남음</b>
+        </div>
+        <button id="appShare" class="appshare">↗ 한 장의 답 공유하기</button>
+        <details>
+          <summary>답의 주제 선택</summary>
+          <div class="cats">
+            <button class="chip on" data-c="all">전체</button
+            ><button class="chip" data-c="love">사랑</button
+            ><button class="chip" data-c="money">돈</button
+            ><button class="chip" data-c="work">일</button
+            ><button class="chip" data-c="people">인간관계</button
+            ><button class="chip" data-c="decision">결정</button
+            ><button class="chip" data-c="today">오늘</button>
+          </div>
+        </details>
+        <div id="actions" class="actions">
+          <button id="again">다시 펼치기</button
+          ><button id="copy">문구 복사</button
+          ><button id="save">이미지 저장</button
+          ><button id="share" class="primary">답 공유하기</button>
+        </div>
+        <div class="histtitle">최근 펼친 답</div>
+        <div id="history" class="history">
+          <div class="hist"><span>아직 펼친 답이 없어요.</span></div>
+        </div>
+      </section>
+      <footer>
+        자기성찰용 앱입니다. 중요한 법률·의료·투자·안전 판단은 객관적 정보와
+        전문가 검토를 기준으로 결정하세요.
+      </footer>
+    </main>
+    <div id="toast" class="toast"></div>
+    <script>
+      (() => {
+        const $ = (s) => document.querySelector(s),
+          $$ = (s) => [...document.querySelectorAll(s)],
+          APP = "https://answer.onentop.art/",
+          SHARE = "https://answer.onentop.art/share.html?v=20260917-5";
+        const A = {
+          all: [
+            "지금은 기다릴 때입니다.",
+            "이번에는 해보는 쪽입니다.",
+            "조금 더 확인한 뒤 움직이세요.",
+            "서두르지 않아도 됩니다.",
+            "작게 시작하면 답이 보입니다.",
+            "확신보다 확인이 먼저입니다.",
+            "후회가 적은 쪽을 고르세요.",
+          ],
+          love: [
+            "먼저 연락해도 괜찮습니다.",
+            "이번에는 조금 기다려보세요.",
+            "말보다 행동을 보세요.",
+            "한 번은 솔직하게 말해보세요.",
+            "거리를 조금 두면 답이 보입니다.",
+          ],
+          money: [
+            "이번에는 보수적으로 가세요.",
+            "숫자를 다시 계산하세요.",
+            "현금흐름부터 확인하세요.",
+            "숨은 비용을 찾아보세요.",
+            "수익보다 위험 관리가 먼저입니다.",
+          ],
+          work: [
+            "먼저 시작하는 게 답입니다.",
+            "범위를 줄이세요.",
+            "역할을 분명히 해야 합니다.",
+            "자료를 먼저 정리하세요.",
+            "다음 단계 하나만 확정하세요.",
+          ],
+          people: [
+            "직접 확인하는 게 낫습니다.",
+            "조금 거리를 두세요.",
+            "반응보다 반복되는 패턴을 보세요.",
+            "당신의 기준을 분명히 하세요.",
+            "관계를 끊기보다 경계를 세워보세요.",
+          ],
+          decision: [
+            "작게 시험해보는 쪽이 좋습니다.",
+            "정보를 더 모으세요.",
+            "최악의 경우를 먼저 계산하세요.",
+            "되돌릴 수 있는 쪽부터 시도하세요.",
+            "오늘 결정하지 않아도 됩니다.",
+          ],
+          today: [
+            "작은 일 하나를 끝내보세요.",
+            "연락 하나를 먼저 해보세요.",
+            "미뤄둔 일을 10분만 시작해보세요.",
+            "정리부터 시작해보세요.",
+            "오늘의 목표는 완벽함보다 회복일 수도 있습니다.",
+          ],
+        };
+        const H = [
+          "이 문장을 읽었을 때 든 첫 반응을 기억해보세요.",
+          "마음이 즉시 반박했다면 그 안에 진짜 기준이 있을 수 있어요.",
+          "중요한 결정이라면 이 문장은 계기로만 사용하세요.",
+        ];
+        let cat = "all",
+          mode = "random",
+          last = "",
+          cur = { q: "", a: "", h: "", mode: "random" },
+          defer = null;
+        const rand = (x) => x[Math.floor(Math.random() * x.length)],
+          day = () => {
+            let d = new Date();
+            return `${d.getFullYear()}-${d.getMonth() + 1}-${d.getDate()}`;
+          };
+        function toast(m) {
+          let t = $("#toast");
+          t.textContent = m;
+          t.style.display = "block";
+          clearTimeout(t.x);
+          t.x = setTimeout(() => (t.style.display = "none"), 1700);
+        }
+        function usage() {
+          let u = { date: day(), used: 0 };
+          try {
+            u = JSON.parse(
+              localStorage.getItem("aiUsage") || JSON.stringify(u),
+            );
+          } catch {}
+          if (u.date !== day()) u = { date: day(), used: 0 };
+          return u;
+        }
+        function remain() {
+          return Math.max(0, 5 - usage().used);
+        }
+        function upd() {
+          $("#remaining").textContent = `오늘 ${remain()}회 남음`;
+        }
+        function use() {
+          let u = usage();
+          u.used++;
+          localStorage.setItem("aiUsage", JSON.stringify(u));
+          upd();
+        }
+        function pick() {
+          let p = A[cat],
+            a = rand(p);
+          if (a === last && p.length > 1) a = p[(p.indexOf(a) + 1) % p.length];
+          last = a;
+          return a;
+        }
+        function show(a, isAI = false) {
+          cur = {
+            q: $("#question").value.trim(),
+            a,
+            h: isAI ? "질문에 맞춘 AI 한 문장입니다." : rand(H),
+            mode: isAI ? "ai" : "random",
+          };
+          $("#label").textContent = isAI ? "AI ANSWER" : "YOUR ANSWER";
+          $("#q").textContent = cur.q
+            ? `“${cur.q}”`
+            : "마음속으로 떠올린 질문에";
+          $("#a").textContent = a;
+          $("#hint").textContent = cur.h;
+          $("#badge").textContent = isAI ? "AI 맞춤답변" : "랜덤 답변";
+          $("#book").classList.add("open");
+          $("#actions").style.display = "grid";
+          saveHist();
+        }
+        async function run() {
+          if (mode === "random") return show(pick());
+          let q = $("#question").value.trim();
+          if (!q) return toast("AI 맞춤답변은 질문을 먼저 적어주세요.");
+          if (remain() <= 0)
+            return toast("오늘 AI 무료 답변 5회를 모두 사용했어요.");
+          let b = $("#go");
+          b.classList.add("loading");
+          b.textContent = "생각 중…";
+          try {
+            let r = await fetch("/api/answer", {
+                method: "POST",
+                headers: { "Content-Type": "application/json" },
+                body: JSON.stringify({ question: q, category: cat }),
+              }),
+              d = await r.json();
+            if (!r.ok) throw Error(d.error || "AI 연결에 실패했습니다.");
+            use();
+            show(d.answer, true);
+          } catch (e) {
+            toast(e.message);
+          } finally {
+            b.classList.remove("loading");
+            b.textContent = "답 보기";
+          }
+        }
+        function closeBook() {
+          $("#book").classList.remove("open");
+        }
+        function openCurrent() {
+          if (cur.a) $("#book").classList.add("open");
+          else run();
+        }
+        function newAnswer() {
+          closeBook();
+          setTimeout(run, 420);
+        }
+        function setMode(m) {
+          mode = m;
+          $("#randomMode").classList.toggle("on", m === "random");
+          $("#aiMode").classList.toggle("on", m === "ai");
+        }
+        function esc(s) {
+          return s.replace(
+            /[&<>"']/g,
+            (m) =>
+              ({
+                "&": "&amp;",
+                "<": "&lt;",
+                ">": "&gt;",
+                '"': "&quot;",
+                "'": "&#039;",
+              })[m],
+          );
+        }
+        function saveHist() {
+          let h = [];
+          try {
+            h = JSON.parse(localStorage.getItem("answerHist") || "[]");
+          } catch {}
+          h.unshift({ q: cur.q, a: cur.a });
+          h = h.slice(0, 8);
+          localStorage.setItem("answerHist", JSON.stringify(h));
+          render();
+        }
+        function render() {
+          let h = [];
+          try {
+            h = JSON.parse(localStorage.getItem("answerHist") || "[]");
+          } catch {}
+          $("#history").innerHTML = h.length
+            ? h
+                .map(
+                  (x) =>
+                    `<div class="hist"><b>${esc(x.q || "마음속 질문")}</b><span>${esc(x.a)}</span></div>`,
+                )
+                .join("")
+            : '<div class="hist"><span>아직 펼친 답이 없어요.</span></div>';
+        }
+        async function appShare() {
+          try {
+            if (navigator.share)
+              await navigator.share({
+                title: "한 장의 답",
+                text: "마음속 질문에, 한 문장.",
+                url: SHARE,
+              });
+            else {
+              await navigator.clipboard.writeText(SHARE);
+              toast("앱 주소를 복사했어요.");
+            }
+          } catch (e) {
+            if (e.name !== "AbortError") toast("공유에 실패했어요.");
+          }
+        }
+        async function answerShare() {
+          if (!cur.a) return toast("먼저 답을 펼쳐주세요.");
+          let text = cur.q ? `${cur.q}\n\n${cur.a}` : cur.a;
+          try {
+            if (navigator.share)
+              await navigator.share({ title: "한 장의 답", text, url: SHARE });
+            else {
+              await navigator.clipboard.writeText(`${text}\n${SHARE}`);
+              toast("답과 주소를 복사했어요.");
+            }
+          } catch (e) {
+            if (e.name !== "AbortError") toast("공유에 실패했어요.");
+          }
+        }
+        async function saveImage() {
+          if (!cur.a) return toast("먼저 답을 펼쳐주세요.");
+          let c = document.createElement("canvas");
+          c.width = 1080;
+          c.height = 1080;
+          let x = c.getContext("2d");
+          x.fillStyle = "#07111f";
+          x.fillRect(0, 0, 1080, 1080);
+          x.strokeStyle = "#d7ad55";
+          x.lineWidth = 3;
+          x.strokeRect(65, 65, 950, 950);
+          x.textAlign = "center";
+          x.fillStyle = "#e3c675";
+          x.font = "600 34px system-ui";
+          x.fillText("한 장의 답", 540, 155);
+          x.fillStyle = "#f7f0df";
+          x.font = "700 58px system-ui";
+          let lines = (cur.a.match(/.{1,15}/g) || [cur.a]).slice(0, 5);
+          lines.forEach((s, i) => x.fillText(s, 540, 470 + i * 76));
+          let blob = await new Promise((r) => c.toBlob(r, "image/png"));
+          let a = document.createElement("a");
+          a.href = URL.createObjectURL(blob);
+          a.download = "한장의답.png";
+          a.click();
+          setTimeout(() => URL.revokeObjectURL(a.href), 1000);
+        }
+        $("#book").onclick = () =>
+          $("#book").classList.contains("open") ? closeBook() : openCurrent();
+        $("#go").onclick = run;
+        $("#again").onclick = newAnswer;
+        $("#appShare").onclick = appShare;
+        $("#share").onclick = answerShare;
+        $("#save").onclick = saveImage;
+        $("#copy").onclick = async () => {
+          if (!cur.a) return toast("먼저 답을 펼쳐주세요.");
+          await navigator.clipboard.writeText(
+            cur.q ? `${cur.q}\n\n${cur.a}` : cur.a,
+          );
+          toast("복사했어요.");
+        };
+        $("#randomMode").onclick = () => setMode("random");
+        $("#aiMode").onclick = () => setMode("ai");
+        $("#question").onkeydown = (e) => {
+          if (e.key === "Enter") $("#go").click();
+        };
+        $$(".chip").forEach(
+          (b) =>
+            (b.onclick = () => {
+              $$(".chip").forEach((x) => x.classList.remove("on"));
+              b.classList.add("on");
+              cat = b.dataset.c;
+            }),
+        );
+        window.addEventListener("beforeinstallprompt", (e) => {
+          e.preventDefault();
+          defer = e;
+          $("#install").style.display = "block";
+        });
+        $("#install").onclick = async () => {
+          if (!defer)
+            return toast("브라우저 메뉴에서 홈 화면에 추가할 수 있어요.");
+          defer.prompt();
+          await defer.userChoice;
+          defer = null;
+          $("#install").style.display = "none";
+        };
+        if ("serviceWorker" in navigator)
+          window.addEventListener("load", () =>
+            navigator.serviceWorker.register("./sw.js"),
+          );
+        upd();
+        render();
+      })();
+    </script>
+  </body>
+</html>
