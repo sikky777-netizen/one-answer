@@ -100,7 +100,7 @@
         place-items: center;
         background: #14243b;
         color: var(--g2);
-        font: 700 23px Georgia;
+        font: 800 10px/1.15 "Noto Sans KR", sans-serif;
         flex: 0 0 auto;
       }
       .brand b {
@@ -291,6 +291,22 @@
         right: -38px;
         bottom: -18px;
       }
+      .quicktools {
+        display: grid;
+        grid-template-columns: repeat(3, 1fr);
+        gap: 8px;
+        margin-top: 10px;
+      }
+      .quicktools button {
+        border: 1px solid #344966;
+        border-radius: 12px;
+        background: #101e32;
+        color: #eef2f7;
+        padding: 10px 7px;
+      }
+      .adwrap {
+        display: none;
+      }
       .panel {
         background: #0e1b2ddd;
         border: 1px solid var(--l);
@@ -471,15 +487,27 @@
         pointer-events: none;
       }
       @media (max-width: 540px) {
-        .app {
-          padding-inline: 14px;
+        html,
+        body {
+          height: 100%;
+          overflow: hidden;
         }
+        .app {
+          width: 100%;
+          height: 100dvh;
+          min-height: 640px;
+          padding: 10px 14px 8px;
+          display: flex;
+          flex-direction: column;
+        }
+        .top { min-height: 42px; }
         .brand {
           gap: 8px;
         }
         .logo {
-          width: 36px;
+          width: 42px;
           height: 42px;
+          font-size: 10px;
         }
         .brand b {
           font-size: 19px;
@@ -487,14 +515,52 @@
         .brand small {
           font-size: 10px;
         }
+        .install { padding: 7px 9px; font-size: 11px; }
+        .hero { padding: 8px 0 2px; }
+        .eye { font-size: 9px; }
+        .hero h1 { font-size: clamp(22px, 6.2vw, 27px); margin: 5px 0 0; line-height: 1.18; }
+        .hero p { display: none; }
         .book-zone {
-          height: 320px;
+          height: auto;
+          flex: 1 1 auto;
+          min-height: 218px;
+          max-height: 278px;
         }
         .book {
-          height: 208px;
+          width: min(306px, 80vw);
+          height: clamp(180px, 24vh, 196px);
         }
+        .page { padding: 18px; }
+        .a { font-size: clamp(22px, 6.5vw, 28px); }
+        .hint { font-size: 10px; }
+        .qm { font: 800 17px/1.1 "Noto Sans KR", sans-serif; letter-spacing: .05em; }
+        .ct { font-size: 26px; }
+        .tap { margin-top: 12px; }
+        .panel { padding: 10px; border-radius: 17px; }
+        .question { padding: 10px 11px; font-size: 12px; }
+        .go { padding: 0 14px; font-size: 12px; }
+        .modes { margin-top: 8px; gap: 7px; }
+        .mode { padding: 8px 5px; border-radius: 11px; font-size: 11px; }
+        .status { display: none; }
+        .quicktools { display: grid; grid-template-columns: repeat(3,1fr); gap: 7px; margin-top: 8px; }
+        .quicktools button { border: 1px solid #2d415d; border-radius: 10px; background: #101e32; color: #aeb9c9; padding: 7px 3px; font-size: 10px; }
+        .appshare { width: auto; margin: 0; padding: 7px 3px; font-weight: 500; }
+        details { display: none; position: fixed; left: 14px; right: 14px; bottom: 72px; z-index: 30; padding: 14px; border: 1px solid #405675; border-radius: 16px; background: #0b1729; box-shadow: 0 18px 45px #000b; }
+        details[open] { display: block; }
+        details summary { font-weight: 700; color: #e5c574; }
+        #historyDrawer { display: none; position: fixed; left: 14px; right: 14px; bottom: 72px; z-index: 30; padding: 12px; border: 1px solid #405675; border-radius: 16px; background: #0b1729; box-shadow: 0 18px 45px #000b; }
+        #historyDrawer.open { display: block; }
         .actions {
           grid-template-columns: repeat(2, 1fr);
+          position: fixed;
+          left: 14px;
+          right: 14px;
+          bottom: 72px;
+          z-index: 31;
+          padding: 10px;
+          border: 1px solid #405675;
+          border-radius: 15px;
+          background: #0b1729;
         }
         .mascot {
           width: 64px;
@@ -504,6 +570,10 @@
           right: -20px;
           bottom: -16px;
         }
+        footer { display: none; }
+        .adwrap { display: block; flex: 0 0 auto; text-align: center; margin-top: 7px; }
+        .adlabel { color: #68788c; font-size: 8px; letter-spacing: .08em; margin-bottom: 3px; }
+        .adslot { width: min(320px,100%); height: 50px; margin: auto; display: grid; place-items: center; border: 1px solid #334762; border-radius: 8px; background: #13253e; color: #75879d; font-size: 10px; }
       }
     </style>
   </head>
@@ -511,7 +581,7 @@
     <main class="app">
       <header class="top">
         <div class="brand">
-          <div class="logo">?</div>
+          <div class="logo"><span>한장<br />의답</span></div>
           <div><b>한 장의 답</b><small>마음속 질문에, 한 문장.</small></div>
         </div>
         <button id="install" class="install">앱 설치</button>
@@ -534,7 +604,7 @@
           </div>
           <div class="cover">
             <div class="coverin">
-              <div class="qm">?</div>
+              <div class="qm">한장의답</div>
               <div class="ct">한 장의 답</div>
               <div class="cs">TOUCH TO OPEN</div>
               <div class="tap">책을 눌러 펼치기</div>
@@ -559,7 +629,7 @@
         <div class="status">
           <span>AI 맞춤답변 테스트</span><b id="remaining">오늘 5회 남음</b>
         </div>
-        <button id="appShare" class="appshare">↗ 한 장의 답 공유하기</button>
+        <div class="quicktools"><button id="topicBtn">주제 선택</button><button id="appShare" class="appshare">공유하기</button><button id="historyBtn">최근 답변</button></div>
         <details>
           <summary>답의 주제 선택</summary>
           <div class="cats">
@@ -578,11 +648,14 @@
           ><button id="save">이미지 저장</button
           ><button id="share" class="primary">답 공유하기</button>
         </div>
-        <div class="histtitle">최근 펼친 답</div>
-        <div id="history" class="history">
-          <div class="hist"><span>아직 펼친 답이 없어요.</span></div>
+        <div id="historyDrawer">
+          <div class="histtitle">최근 펼친 답</div>
+          <div id="history" class="history">
+            <div class="hist"><span>아직 펼친 답이 없어요.</span></div>
+          </div>
         </div>
       </section>
+      <div class="adwrap"><div class="adlabel">ADVERTISEMENT</div><div class="adslot">320 × 50 배너광고 영역</div></div>
       <footer>
         자기성찰용 앱입니다. 중요한 법률·의료·투자·안전 판단은 객관적 정보와
         전문가 검토를 기준으로 결정하세요.
@@ -856,6 +929,15 @@
         $("#go").onclick = run;
         $("#again").onclick = newAnswer;
         $("#appShare").onclick = appShare;
+        $("#topicBtn").onclick = () => {
+          const panel = $("details");
+          panel.open = !panel.open;
+          $("#historyDrawer").classList.remove("open");
+        };
+        $("#historyBtn").onclick = () => {
+          $("#historyDrawer").classList.toggle("open");
+          $("details").open = false;
+        };
         $("#share").onclick = answerShare;
         $("#save").onclick = saveImage;
         $("#copy").onclick = async () => {
