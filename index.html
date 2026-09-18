@@ -40,6 +40,9 @@
     />
     <link rel="manifest" href="./manifest.webmanifest" />
     <link rel="icon" href="./icon-192.png" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800&amp;family=Noto+Serif+KR:wght@600;700&amp;display=swap" rel="stylesheet" />
     <title>한 장의 답</title>
     <style>
       :root {
@@ -59,12 +62,7 @@
           radial-gradient(circle at 50% -20%, #22385e, transparent 43%),
           linear-gradient(#0c1829, #06101c 70%);
         color: var(--t);
-        font-family:
-          system-ui,
-          -apple-system,
-          "Segoe UI",
-          "Noto Sans KR",
-          sans-serif;
+        font-family: "Noto Sans KR", system-ui, sans-serif;
       }
       button,
       input {
@@ -106,8 +104,7 @@
       .brand b {
         display: block;
         font:
-          700 21px Georgia,
-          "Noto Serif KR",
+          700 21px "Noto Serif KR",
           serif;
         line-height: 1.15;
         white-space: nowrap;
@@ -138,8 +135,7 @@
       }
       .hero h1 {
         font:
-          700 clamp(31px, 8vw, 52px) / 1.18 Georgia,
-          "Noto Serif KR",
+          700 clamp(31px, 8vw, 52px) / 1.18 "Noto Serif KR",
           serif;
         margin: 12px 0 8px;
       }
@@ -207,8 +203,7 @@
       }
       .a {
         font:
-          700 clamp(22px, 6vw, 33px) / 1.4 Georgia,
-          "Noto Serif KR",
+          700 clamp(22px, 6vw, 33px) / 1.4 "Noto Serif KR",
           serif;
         word-break: keep-all;
       }
@@ -246,13 +241,12 @@
         z-index: 2;
       }
       .qm {
-        font: 700 72px Georgia;
+        font: 600 19px/1.4 "Noto Serif KR", serif;
         color: var(--g2);
       }
       .ct {
         font:
-          700 31px Georgia,
-          "Noto Serif KR",
+          700 31px "Noto Serif KR",
           serif;
       }
       .cs {
@@ -539,7 +533,7 @@
         .page { padding: 18px; }
         .a { font-size: clamp(22px, 6.5vw, 28px); }
         .hint { font-size: 10px; }
-        .qm { font: 800 17px/1.1 "Noto Sans KR", sans-serif; letter-spacing: .05em; }
+        .qm { font-size: 17px; letter-spacing: .05em; }
         .ct { font-size: 26px; }
         .tap { margin-top: 12px; }
         .panel { padding: 13px; border-radius: 17px; }
@@ -936,6 +930,10 @@
         }
         async function saveImage() {
           if (!cur.a) return toast("먼저 답을 펼쳐주세요.");
+          try {
+            await document.fonts.load('600 34px "Noto Serif KR"');
+            await document.fonts.load('700 58px "Noto Serif KR"', cur.a);
+          } catch {}
           let c = document.createElement("canvas");
           c.width = 1080;
           c.height = 1080;
@@ -947,10 +945,10 @@
           x.strokeRect(65, 65, 950, 950);
           x.textAlign = "center";
           x.fillStyle = "#e3c675";
-          x.font = "600 34px system-ui";
+          x.font = '600 34px "Noto Serif KR", serif';
           x.fillText("한 장의 답", 540, 155);
           x.fillStyle = "#f7f0df";
-          x.font = "700 58px system-ui";
+          x.font = '700 58px "Noto Serif KR", serif';
           let lines = (cur.a.match(/.{1,15}/g) || [cur.a]).slice(0, 5);
           lines.forEach((s, i) => x.fillText(s, 540, 470 + i * 76));
           let blob = await new Promise((r) => c.toBlob(r, "image/png"));
