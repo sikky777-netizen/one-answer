@@ -32,6 +32,12 @@ function boot(storage = new Map(), request) {
   for (let i = 0; i < 5; i++) await app.run();
   assert.equal(app.node('#a').textContent, answer);
   assert.equal(app.node('#hint').textContent, hint);
+  app.node('#again').onclick();
+  assert.equal(app.node('#book').classList.contains('open'), false);
+  assert.equal(app.node('#actions').style.display, 'none', 'reset hides answer tools');
+  app.node('#book').onclick();
+  assert.equal(app.node('#book').classList.contains('open'), true);
+  assert.equal(app.node('#a').textContent, answer, 'reopening preserves saved question answer');
   assert.equal(JSON.parse(storage.get('answerHist')).length, 1);
   app = boot(storage);
   app.node('#question').value = '  시작해도   될까?  ';
