@@ -586,11 +586,14 @@
         .adslot { width: min(320px,100%); height: 50px; margin: auto; display: grid; place-items: center; border: 1px solid #334762; border-radius: 8px; background: #13253e; color: #75879d; font-size: 10px; }
       }
       .adwrap { display: block; text-align: center; margin-top: 7px; }
-      .adslot { width: min(320px, 100%); height: auto; margin: auto; overflow: hidden; border: 1px solid #334762; border-radius: 8px; background: #05080b; }
-      .adslot img { display: block; width: 100%; height: auto; }
+      .adslot { width: min(320px, 100%); height: 82px; margin: auto; overflow: hidden; border: 1px solid #334762; border-radius: 8px; background: #05080b; }
+      .adslot img { display: block; width: 100%; height: 80px; object-fit: contain; }
       @media (max-width: 540px) {
-        .app { height: auto; min-height: 100dvh; }
-        .book-zone { flex: 1 0 218px; }
+        .app { height: 100dvh; min-height: 660px; }
+        .book-zone { flex: 1 1 auto; }
+        .answer-tools-space { display: flow-root; height: 52px; }
+        .actions button { height: 44px; }
+        .adwrap { margin-top: auto; padding-top: 7px; }
       }
     </style>
   </head>
@@ -659,11 +662,13 @@
             ><button class="chip" data-c="today">오늘</button>
           </div>
         </details>
+        <div class="answer-tools-space">
         <div id="actions" class="actions">
           <button id="again">다시 펼치기</button
           ><button id="copy">문구 복사</button
           ><button id="save">이미지 저장</button
           ><button id="share" class="primary">답 공유하기</button>
+        </div>
         </div>
         <div id="historyDrawer">
           <div class="histtitle">최근 펼친 답</div>
