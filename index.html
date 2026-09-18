@@ -218,15 +218,6 @@
         margin-top: 13px;
         line-height: 1.5;
       }
-      .badge {
-        display: inline-block;
-        margin-top: 12px;
-        font-size: 10px;
-        color: #987329;
-        border: 1px solid #d2c0a0;
-        border-radius: 999px;
-        padding: 4px 9px;
-      }
       .cover {
         position: absolute;
         inset: 0;
@@ -286,8 +277,10 @@
         transition: 0.35s 0.4s;
         z-index: 6;
         box-shadow: 0 8px 20px #0008;
-        background-image: url("./og-image.jpg?v=20260917-5");
+        background-image: url("./dubu-avatar.jpg?v=20260918-1");
         background-repeat: no-repeat;
+        background-size: cover;
+        background-position: center;
         background-color: #0b1626;
       }
       .book.open .mascot {
@@ -297,8 +290,6 @@
       .dubu {
         right: -38px;
         bottom: -18px;
-        background-size: 430px 226px;
-        background-position: -25px -142px;
       }
       .panel {
         background: #0e1b2ddd;
@@ -539,7 +530,6 @@
               <div id="q" class="q">마음속 질문에</div>
               <div id="a" class="a">책을 펼쳐보세요.</div>
               <div id="hint" class="hint"></div>
-              <div id="badge" class="badge">랜덤 답변</div>
             </div>
           </div>
           <div class="cover">
@@ -722,7 +712,6 @@
             : "마음속으로 떠올린 질문에";
           $("#a").textContent = a;
           $("#hint").textContent = cur.h;
-          $("#badge").textContent = isAI ? "AI 맞춤답변" : "랜덤 답변";
           $("#book").classList.add("open");
           $("#actions").style.display = "grid";
           saveHist();
