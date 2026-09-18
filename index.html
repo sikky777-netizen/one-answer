@@ -779,13 +779,28 @@
           last = a;
           return a;
         }
-        function show(a, isAI = false) {
-          cur = {
-            q: $("#question").value.trim(),
+        const answerKey = (q, m) => JSON.stringify([m, q.normalize("NFC").trim().replace(/\s+/g, " ").toLowerCase()]);
+        let savedAnswers = Object.create(null), busy = false;
+        try {
+          const stored = JSON.parse(localStorage.getItem("questionAnswers-v1") || "{}");
+          if (stored && typeof stored === "object" && !Array.isArray(stored))
+            Object.assign(savedAnswers, stored);
+        } catch {}
+        function show(a, isAI = false, q = $("#question").value.trim(), saved = null) {
+          cur = saved ? { ...saved, q } : {
+            q,
             a,
             h: isAI ? "질문에 맞춘 AI 한 문장입니다." : rand(H),
             mode: isAI ? "ai" : "random",
           };
+          if (q && !saved) {
+            savedAnswers[answerKey(q, cur.mode)] = { ...cur };
+            try {
+              localStorage.setItem("questionAnswers-v1", JSON.stringify(savedAnswers));
+            } catch {
+              toast("답은 현재 화면에서 유지돼요. 기기 저장 공간을 확인해주세요.");
+            }
+          }
           $("#label").textContent = isAI ? "AI ANSWER" : "YOUR ANSWER";
           $("#q").textContent = cur.q
             ? `“${cur.q}”`
@@ -797,12 +812,18 @@
           saveHist();
         }
         async function run() {
-          if (mode === "random") return show(pick());
+          if (busy) return;
           let q = $("#question").value.trim();
+          const saved = q && savedAnswers[answerKey(q, mode)];
+          if (saved && typeof saved.a === "string" && saved.a)
+            return show(saved.a, mode === "ai", q, saved);
+          if (mode === "random") return show(pick(), false, q);
           if (!q) return toast("AI 맞춤답변은 질문을 먼저 적어주세요.");
           if (remain() <= 0)
             return toast("오늘 AI 무료 답변 5회를 모두 사용했어요.");
           let b = $("#go");
+          busy = true;
+          b.disabled = true;
           b.classList.add("loading");
           b.textContent = "생각 중…";
           try {
@@ -813,11 +834,15 @@
               }),
               d = await r.json();
             if (!r.ok) throw Error(d.error || "AI 연결에 실패했습니다.");
+            if (typeof d.answer !== "string" || !d.answer.trim())
+              throw Error("답변을 받지 못했어요. 다시 시도해주세요.");
             use();
-            show(d.answer, true);
+            show(d.answer, true, q);
           } catch (e) {
             toast(e.message);
           } finally {
+            busy = false;
+            b.disabled = false;
             b.classList.remove("loading");
             b.textContent = "답 보기";
           }
@@ -826,7 +851,9 @@
           $("#book").classList.remove("open");
         }
         function openCurrent() {
-          if (cur.a) $("#book").classList.add("open");
+          const q = $("#question").value.trim();
+          if (cur.a && answerKey(cur.q, cur.mode) === answerKey(q, mode))
+            $("#book").classList.add("open");
           else run();
         }
         function newAnswer() {
@@ -856,6 +883,8 @@
           try {
             h = JSON.parse(localStorage.getItem("answerHist") || "[]");
           } catch {}
+          if (!Array.isArray(h)) h = [];
+          h = h.filter((x) => x.q !== cur.q || x.a !== cur.a);
           h.unshift({ q: cur.q, a: cur.a });
           h = h.slice(0, 8);
           localStorage.setItem("answerHist", JSON.stringify(h));
