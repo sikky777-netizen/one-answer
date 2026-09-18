@@ -585,6 +585,13 @@
         .adlabel { color: #68788c; font-size: 8px; letter-spacing: .08em; margin-bottom: 3px; }
         .adslot { width: min(320px,100%); height: 50px; margin: auto; display: grid; place-items: center; border: 1px solid #334762; border-radius: 8px; background: #13253e; color: #75879d; font-size: 10px; }
       }
+      .adwrap { display: block; text-align: center; margin-top: 7px; }
+      .adslot { width: min(320px, 100%); height: auto; margin: auto; overflow: hidden; border: 1px solid #334762; border-radius: 8px; background: #05080b; }
+      .adslot img { display: block; width: 100%; height: auto; }
+      @media (max-width: 540px) {
+        .app { height: auto; min-height: 100dvh; }
+        .book-zone { flex: 1 0 218px; }
+      }
     </style>
   </head>
   <body>
@@ -665,7 +672,7 @@
           </div>
         </div>
       </section>
-      <div class="adwrap"><div class="adlabel">ADVERTISEMENT</div><div class="adslot">320 × 50 배너광고 영역</div></div>
+      <div class="adwrap"><div class="adlabel">테스트 광고</div><div class="adslot"><img src="./taxi-ad.webp" alt="강남 B사이드 작가 주원규 각본, 살인택시 — 곧 개봉" width="1774" height="887" /></div></div>
       <footer>
         자기성찰용 앱입니다. 중요한 법률·의료·투자·안전 판단은 객관적 정보와
         전문가 검토를 기준으로 결정하세요.
